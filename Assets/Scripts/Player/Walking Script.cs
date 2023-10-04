@@ -41,7 +41,7 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         // Horizontal rotation
-        transform.Rotate(Vector3.up * Input.GetAxis("Mouse X") * 2f);   // Adjust the multiplier for different rotation speed
+        transform.Rotate(Vector3.up * Input.GetAxis("Mouse X") * 5f);   // Adjust the multiplier for different rotation speed
 
         newVelocity = Vector3.up * rb.velocity.y;
         float speed = Input.GetKey(KeyCode.LeftShift) ? runSpeed : walkSpeed;
