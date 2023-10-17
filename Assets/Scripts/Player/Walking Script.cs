@@ -7,7 +7,7 @@ public class PlayerController : MonoBehaviour
 
     [Header("References")]
     public Rigidbody rb;
-    public Transform head;
+    // public Transform head;
     public Camera camera;
 
 
@@ -69,14 +69,14 @@ public class PlayerController : MonoBehaviour
         else isGrounded = false;
     }
 
-    void LateUpdate()
-    {
-        // Vertical rotation
-        Vector3 e = head.eulerAngles;
-        e.x -= Input.GetAxis("Mouse Y") * 2f;   //  Edit the multiplier to adjust the rotate speed
-        e.x = RestrictAngle(e.x, -85f, 85f);    //  This is clamped to 85 degrees. You may edit this.
-        head.eulerAngles = e;
-    }
+    // void LateUpdate()
+    // {
+    //     // Vertical rotation
+    //     // Vector3 e = head.eulerAngles;
+    //     e.x -= Input.GetAxis("Mouse Y") * 2f;   //  Edit the multiplier to adjust the rotate speed
+    //     e.x = RestrictAngle(e.x, -85f, 85f);    //  This is clamped to 85 degrees. You may edit this.
+    //     head.eulerAngles = e;
+    // }
 
 
 
