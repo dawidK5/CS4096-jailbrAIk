@@ -8,17 +8,18 @@ using UnityEngine.AI;
 
 public class EnemyPatrol : MonoBehaviour
 {
-  // [SerializeField]
+  [SerializeField]
   public int currentNode = 0;
   float waitTimeAtNode = 3.0f;
   bool isPatrolWaiting = false;
   bool isWaiting = false;
   bool isMoving = false;
 
-  // [SerializeReference]
+  [SerializeReference]
   public PatrolNode[] P_NODES = new PatrolNode[9];
   GameObject[] NODES = new GameObject[9];
   public NavMeshAgent agent;
+
 
   public void AssignNearestNodes()
   {
@@ -28,11 +29,11 @@ public class EnemyPatrol : MonoBehaviour
       {
         if (i != j)
         {
-          // float dist = 
-          Debug.Log($"Dist {i} to {j}: {Vector3.Distance(P_NODES[i].location, P_NODES[j].location)}");
-          if (Vector3.Distance(P_NODES[i].location, P_NODES[j].location) < P_NODES[i].nearNodesRadius)
+          float dist = (P_NODES[i].location - P_NODES[j].location).sqrMagnitude;
+          Debug.Log("Dist " + i + " to " + j + " " + dist);
+          if (dist < P_NODES[i].nearNodesRadius)
           {
-            P_NODES[i].nearNodes.Add(P_NODES[j]);
+            P_NODES[i].AddNear(P_NODES[j]);
           }
         }
       }

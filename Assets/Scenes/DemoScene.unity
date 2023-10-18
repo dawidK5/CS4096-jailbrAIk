@@ -137,7 +137,7 @@ GameObject:
   - component: {fileID: 76442978}
   - component: {fileID: 76442981}
   m_Layer: 0
-  m_Name: Node (6)
+  m_Name: Node (7)
   m_TagString: Node
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -152,7 +152,7 @@ Transform:
   m_GameObject: {fileID: 76442976}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 27.048141, y: 0.9700092, z: -8.19}
+  m_LocalPosition: {x: 27, y: 0, z: -4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -175,7 +175,7 @@ SphereCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
@@ -241,10 +241,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5432eb2d58a46e4b83a697787392fe1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  radius: 0.5
-  nearNodesRadius: 50
+  nearNodesRadius: 210
+  nearNodes: []
   location: {x: 0, y: 0, z: 0}
-  nearestNodes: []
+  nearNodesIndex: 0
+  radius: 0.5
 --- !u!1 &146612011
 GameObject:
   m_ObjectHideFlags: 0
@@ -259,7 +260,7 @@ GameObject:
   - component: {fileID: 146612013}
   - component: {fileID: 146612016}
   m_Layer: 0
-  m_Name: Node
+  m_Name: Node (4)
   m_TagString: Node
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -274,7 +275,7 @@ Transform:
   m_GameObject: {fileID: 146612011}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 14.26, y: 0.9700092, z: 15.56}
+  m_LocalPosition: {x: 15.3, y: 0, z: 17.94}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -297,7 +298,7 @@ SphereCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
@@ -363,10 +364,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5432eb2d58a46e4b83a697787392fe1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  radius: 0.5
-  nearNodesRadius: 50
+  nearNodesRadius: 210
+  nearNodes: []
   location: {x: 0, y: 0, z: 0}
-  nearestNodes: []
+  nearNodesIndex: 0
+  radius: 0.5
 --- !u!1 &250533413
 GameObject:
   m_ObjectHideFlags: 0
@@ -457,7 +459,7 @@ Transform:
   m_GameObject: {fileID: 303935591}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.0318594, y: 0.099990845, z: 4.421844}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -484,9 +486,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60ff5310c72faa348a29ce0400700ad3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  agent: {fileID: 581480830}
-  NODES:
-  - {fileID: 481879571}
+  currentNode: 0
+  P_NODES:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
@@ -496,8 +497,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  agent: {fileID: 0}
 --- !u!1 &481879566
 GameObject:
   m_ObjectHideFlags: 0
@@ -512,7 +512,7 @@ GameObject:
   - component: {fileID: 481879567}
   - component: {fileID: 481879571}
   m_Layer: 0
-  m_Name: Node (4)
+  m_Name: Node (1)
   m_TagString: Node
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -597,8 +597,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 481879566}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 18.23, y: 0.9700092, z: 0.4}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 19, y: 0, z: 6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -616,10 +616,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5432eb2d58a46e4b83a697787392fe1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  radius: 0.5
-  nearNodesRadius: 50
+  nearNodesRadius: 210
+  nearNodes: []
   location: {x: 0, y: 0, z: 0}
-  nearestNodes: []
+  nearNodesIndex: 0
+  radius: 0.5
 --- !u!1 &525319933
 GameObject:
   m_ObjectHideFlags: 0
@@ -634,7 +635,7 @@ GameObject:
   - component: {fileID: 525319934}
   - component: {fileID: 525319938}
   m_Layer: 0
-  m_Name: Node
+  m_Name: Node (2)
   m_TagString: Node
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -657,7 +658,7 @@ SphereCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
@@ -720,7 +721,7 @@ Transform:
   m_GameObject: {fileID: 525319933}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.25185943, y: 0.9700092, z: 0.39815617}
+  m_LocalPosition: {x: 0.75, y: 0, z: 4.81}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -738,10 +739,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5432eb2d58a46e4b83a697787392fe1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  radius: 0.5
-  nearNodesRadius: 50
+  nearNodesRadius: 210
+  nearNodes: []
   location: {x: 0, y: 0, z: 0}
-  nearestNodes: []
+  nearNodesIndex: 0
+  radius: 0.5
 --- !u!1 &581480829 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7664137816357606315, guid: 034959bc9b0c51f4bbe0ef2a63fb3a65, type: 3}
@@ -1079,7 +1081,7 @@ GameObject:
   - component: {fileID: 738257221}
   - component: {fileID: 738257225}
   m_Layer: 0
-  m_Name: Node (2)
+  m_Name: Node (3)
   m_TagString: Node
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1102,7 +1104,7 @@ SphereCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
@@ -1165,7 +1167,7 @@ Transform:
   m_GameObject: {fileID: 738257220}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 3.29, y: 0.9700092, z: 21.528156}
+  m_LocalPosition: {x: 4.27, y: 0, z: 26}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1183,10 +1185,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5432eb2d58a46e4b83a697787392fe1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  radius: 0.5
-  nearNodesRadius: 50
+  nearNodesRadius: 210
+  nearNodes: []
   location: {x: 0, y: 0, z: 0}
-  nearestNodes: []
+  nearNodesIndex: 0
+  radius: 0.5
 --- !u!1001 &749977733
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1368,37 +1371,6 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -5495902117074765545, guid: fe74b2c96e5f2764180d28d0c98746df, type: 3}
---- !u!1 &997172387
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 997172389}
-  m_Layer: 0
-  m_Name: StateManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &997172389
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 997172387}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1151121654
 GameObject:
   m_ObjectHideFlags: 0
@@ -1413,7 +1385,7 @@ GameObject:
   - component: {fileID: 1151121655}
   - component: {fileID: 1151121659}
   m_Layer: 0
-  m_Name: Node (1)
+  m_Name: Node (9)
   m_TagString: Node
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1436,7 +1408,7 @@ SphereCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
@@ -1499,7 +1471,7 @@ Transform:
   m_GameObject: {fileID: 1151121654}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 6.8481407, y: 0.9700092, z: 12.369999}
+  m_LocalPosition: {x: 8, y: 0, z: 16}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1517,10 +1489,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5432eb2d58a46e4b83a697787392fe1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  radius: 0.5
-  nearNodesRadius: 50
+  nearNodesRadius: 210
+  nearNodes: []
   location: {x: 0, y: 0, z: 0}
-  nearestNodes: []
+  nearNodesIndex: 0
+  radius: 0.5
 --- !u!1 &1191331528
 GameObject:
   m_ObjectHideFlags: 0
@@ -1983,7 +1956,7 @@ GameObject:
   - component: {fileID: 1470248346}
   - component: {fileID: 1470248350}
   m_Layer: 0
-  m_Name: Node (3)
+  m_Name: Node (6)
   m_TagString: Node
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2006,7 +1979,7 @@ SphereCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
@@ -2069,7 +2042,7 @@ Transform:
   m_GameObject: {fileID: 1470248345}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 28.81, y: 9.930009, z: 22.058155}
+  m_LocalPosition: {x: 30, y: 9, z: 27.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2087,10 +2060,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5432eb2d58a46e4b83a697787392fe1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  radius: 0.5
-  nearNodesRadius: 50
+  nearNodesRadius: 210
+  nearNodes: []
   location: {x: 0, y: 0, z: 0}
-  nearestNodes: []
+  nearNodesIndex: 0
+  radius: 0.5
 --- !u!1 &1502043760
 GameObject:
   m_ObjectHideFlags: 0
@@ -2105,7 +2079,7 @@ GameObject:
   - component: {fileID: 1502043761}
   m_Layer: 0
   m_Name: DoorKey
-  m_TagString: Node
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2210,7 +2184,7 @@ GameObject:
   - component: {fileID: 1844486275}
   - component: {fileID: 1844486279}
   m_Layer: 0
-  m_Name: Node (5)
+  m_Name: Node (8)
   m_TagString: Node
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2233,7 +2207,7 @@ SphereCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
@@ -2296,7 +2270,7 @@ Transform:
   m_GameObject: {fileID: 1844486274}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 5.67, y: 0.9700092, z: -6.04}
+  m_LocalPosition: {x: 1, y: 0, z: -4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2314,10 +2288,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5432eb2d58a46e4b83a697787392fe1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  radius: 0.5
-  nearNodesRadius: 50
+  nearNodesRadius: 210
+  nearNodes: []
   location: {x: 0, y: 0, z: 0}
-  nearestNodes: []
+  nearNodesIndex: 0
+  radius: 0.5
 --- !u!1 &1919342285
 GameObject:
   m_ObjectHideFlags: 0
@@ -2332,8 +2307,8 @@ GameObject:
   - component: {fileID: 1919342286}
   - component: {fileID: 1919342290}
   m_Layer: 0
-  m_Name: Node (6)
-  m_TagString: Untagged
+  m_Name: Node (5)
+  m_TagString: Node
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2355,7 +2330,7 @@ SphereCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
@@ -2418,7 +2393,7 @@ Transform:
   m_GameObject: {fileID: 1919342285}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 23.228142, y: 0.9700092, z: 16.128155}
+  m_LocalPosition: {x: 22.2, y: 0, z: 19.7}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2436,10 +2411,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5432eb2d58a46e4b83a697787392fe1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  radius: 0.5
-  nearNodesRadius: 50
+  nearNodesRadius: 210
+  nearNodes: []
   location: {x: 0, y: 0, z: 0}
-  nearestNodes: []
+  nearNodesIndex: 0
+  radius: 0.5
 --- !u!1001 &249576979279187663
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2456,6 +2432,14 @@ PrefabInstance:
       propertyPath: agent
       value: 
       objectReference: {fileID: 581480830}
+    - target: {fileID: 4126061077915198771, guid: 034959bc9b0c51f4bbe0ef2a63fb3a65, type: 3}
+      propertyPath: seeingPlayer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4126061077915198771, guid: 034959bc9b0c51f4bbe0ef2a63fb3a65, type: 3}
+      propertyPath: playerCollider.Array.data[0]
+      value: 
+      objectReference: {fileID: 1374469146}
     - target: {fileID: 7135167199742539034, guid: 034959bc9b0c51f4bbe0ef2a63fb3a65, type: 3}
       propertyPath: m_LocalPosition.x
       value: 17.41
@@ -2500,6 +2484,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Enemy
       objectReference: {fileID: 0}
+    - target: {fileID: 7664137816357606315, guid: 034959bc9b0c51f4bbe0ef2a63fb3a65, type: 3}
+      propertyPath: m_TagString
+      value: Enemy
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -2536,6 +2524,5 @@ SceneRoots:
   - {fileID: 749977733}
   - {fileID: 1374469149}
   - {fileID: 249576979279187663}
-  - {fileID: 997172389}
   - {fileID: 1502043764}
   - {fileID: 303935593}
