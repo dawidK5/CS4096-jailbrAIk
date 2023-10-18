@@ -11,7 +11,7 @@ public class EnemyController : MonoBehaviour
     [Header("References")]
     public float loopTime = 0.0f;
     public NavMeshAgent agent;
-    Collider[] playerCollider = new Collider[1];
+    public Collider[] playerCollider = new Collider[1];
     public Transform goal;
     public bool seeingPlayer = false;
     public struct PlayerSeen
@@ -55,6 +55,7 @@ public class EnemyController : MonoBehaviour
     {
       // agent = GetComponent<NavMeshAgent>();
       // goal = GetComponent<Transform>();
+      currentState = ENEMY_STATES.IDLE;
       StartCoroutine("FOVTimeout");
     }
 
@@ -96,9 +97,13 @@ public class EnemyController : MonoBehaviour
             canSeePlayer = true;
             // update player seen
             playerSeen.lastSeenHeard = Time.time;
-            // playerSeen.lastPosition = player.transform.position;
+            playerSeen.lastPosition = playerCollider[0].transform.position;
           }
         }
+      }
+      if (!canSeePlayer)
+      {
+        Debug.Log("Player not seen");
       }
     }
     
@@ -132,8 +137,8 @@ public class EnemyController : MonoBehaviour
         }
         allStates[(int)currentState].exec();
         Debug.Log("Set current to " + currentState.ToString());
-        bored -= 0.0001f;
         loopTime = 0.0f;
+        bored -= 0.1f;
       }
       loopTime += Time.deltaTime;
 

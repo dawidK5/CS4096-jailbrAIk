@@ -18,19 +18,21 @@ public class PatrolNode : MonoBehaviour
     // }
     [SerializeField]
     public float radius = 0.5f;
-    public float nearNodesRadius = 50.0f;
-    public Vector3 location;
-    public List<PatrolNode> nearestNodes;
+    public float nearNodesRadius = 10.0f;
+    public Vector3 location; // duplicated for ease of access
+    public List<PatrolNode> nearNodes;
 
-    // public void Start()
-    // {
-    //   // get nearest nodes as children of the parent GameObject
-
-    // }
+    public void Start()
+    {
+      location = transform.position;
+      // Debug.Log($"Dist is {Vector3.Distance(new Vector3(19,0,6), new Vector3(27,0,-4))}");
+    }
     public virtual void OnDrawGizmos()
     {
         Gizmos.color = Color.yellow;
         Gizmos.DrawSphere(transform.position, radius);
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, nearNodesRadius);
     }
 
 

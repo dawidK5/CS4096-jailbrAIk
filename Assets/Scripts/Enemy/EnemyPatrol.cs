@@ -2,75 +2,75 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.AI;
 
 public class EnemyPatrol : MonoBehaviour
 {
-  [SerializeField]
-  public NavMeshAgent agent;
-  public PatrolNode[] NODES = new PatrolNode[12];
+  // [SerializeField]
+  public int currentNode = 0;
   float waitTimeAtNode = 3.0f;
   bool isPatrolWaiting = false;
   bool isWaiting = false;
-  int currentNode = 0;
   bool isMoving = false;
 
-  
-  private void AssignNearestNodes()
-  {
-    GameObject[] spheres = GameObject.FindGameObjectsWithTag("Node");
-    foreach (GameObject s in spheres)
-    {
-      Debug.Log(s.ToString());
-      NODES[0].location = s.transform.position;
-    }
-    // for (int i = 0; i < spheres.Length; i++)
-    // {
-    //   // print the sphere number
+  // [SerializeReference]
+  public PatrolNode[] P_NODES = new PatrolNode[9];
+  GameObject[] NODES = new GameObject[9];
+  public NavMeshAgent agent;
 
-    //   Debug.Log(i + "th sphere found", spheres[i]);
-    //   NODES[i].location = spheres[i].transform.position;
-    // }
-    // for (int i = 0; i < NODES.Length; i++)
-    // {
-    //   for (int j = 0; j < NODES.Length; j++)
-    //   {
-    //     if (i != j)
-    //     {
-    //       if (Vector3.Distance(NODES[i].location, NODES[j].location) < NODES[i].nearNodesRadius)
-    //       {
-    //         NODES[i].nearestNodes.Add(NODES[j]);
-    //       }
-    //     }
-    //   }
-    // }
+  public void AssignNearestNodes()
+  {
+    for (int i = 0; i < P_NODES.Length; i++)
+    {      
+      for (int j = 0; j < P_NODES.Length; j++)
+      {
+        if (i != j)
+        {
+          // float dist = 
+          Debug.Log($"Dist {i} to {j}: {Vector3.Distance(P_NODES[i].location, P_NODES[j].location)}");
+          if (Vector3.Distance(P_NODES[i].location, P_NODES[j].location) < P_NODES[i].nearNodesRadius)
+          {
+            P_NODES[i].nearNodes.Add(P_NODES[j]);
+          }
+        }
+      }
+    }
   }
+
   public void Start()
   {
-    // agent = GameObject.FindGameObjectWithTag("Enemy").GetComponent<NavMeshAgent>();
+    NODES = GameObject.FindGameObjectsWithTag("Node");
+    for (int i = 0; i < NODES.Length; i++)
+    {
+      Debug.Log($"{i}th sphere found");
+      P_NODES[i] = NODES[i].GetComponent<PatrolNode>();
+    }
+    agent = GameObject.FindGameObjectWithTag("Enemy").GetComponent<NavMeshAgent>();
     Debug.Log("Agent is " + agent.ToString());
     AssignNearestNodes();
-    UpdateDestination();
+    // UpdateDestination();
   }
 
-  public void Update()
-  {
-    if (isMoving && agent.remainingDistance < 1.0f)
-    { // moving close to the patrol point
-      isMoving = false;
-      if (isPatrolWaiting)
-      {
-        isWaiting = true;
-      }
-      else
-      {
-        ChangePatrolPoint();
-        UpdateDestination();
-      }
+
+  // public void Update()
+  // {
+  //   if (isMoving && agent.remainingDistance < 1.0f)
+  //   { // moving close to the patrol point
+  //     isMoving = false;
+  //     if (isPatrolWaiting)
+  //     {
+  //       isWaiting = true;
+  //     }
+  //     else
+  //     {
+  //       ChangePatrolPoint();
+  //       UpdateDestination();
+  //     }
       
-    }
-  }
+  //   }
+  // }
 
   private void ChangePatrolPoint()
   { // go foward or backward depending on random choice
@@ -79,7 +79,7 @@ public class EnemyPatrol : MonoBehaviour
 
   private void UpdateDestination()
   {
-    agent.SetDestination(NODES[currentNode].location);
+    agent.SetDestination(P_NODES[currentNode].location);
   }
 
   // public Vector3 GetClosestNode(Vector3 pos)
