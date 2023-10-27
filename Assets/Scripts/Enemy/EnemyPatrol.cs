@@ -1,8 +1,5 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEditor.Experimental.GraphView;
+using STMGR;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -10,78 +7,91 @@ public class EnemyPatrol : MonoBehaviour
 {
   [SerializeField]
   public int currentNode = 0;
-  float waitTimeAtNode = 3.0f;
-  bool isPatrolWaiting = false;
-  bool isWaiting = false;
-  bool isMoving = false;
+  const float waitTimeAtNode = 3.0f;
+  // bool isPatrolWaiting = false;
+  // bool isWaiting = false;
+  // bool isMoving = false;
 
   [SerializeReference]
-  public PatrolNode[] P_NODES = new PatrolNode[9];
-  GameObject[] NODES = new GameObject[9];
+  public PatrolNode[] P_NODES;
+  public EnemyController enemy;
   public NavMeshAgent agent;
-
+  public FSMStatus fsmStatus;
+  private float[] waitTimes = new float[1]
+  {
+    3.0f
+  };
 
   public void AssignNearestNodes()
   {
     for (int i = 0; i < P_NODES.Length; i++)
-    {      
+    {
       for (int j = 0; j < P_NODES.Length; j++)
       {
         if (i != j)
         {
           float dist = (P_NODES[i].location - P_NODES[j].location).sqrMagnitude;
           Debug.Log("Dist " + i + " to " + j + " " + dist);
-          if (dist < P_NODES[i].nearNodesRadius)
+          if (dist < P_NODES[i].nearNodesRadiusSq)
           {
+            Debug.Log("Adding " + j + " to " + i);
             P_NODES[i].AddNear(P_NODES[j]);
           }
         }
       }
     }
   }
-
-  public void Start()
+  void Start()
   {
-    NODES = GameObject.FindGameObjectsWithTag("Node");
-    for (int i = 0; i < NODES.Length; i++)
-    {
-      Debug.Log($"{i}th sphere found");
-      P_NODES[i] = NODES[i].GetComponent<PatrolNode>();
-    }
-    agent = GameObject.FindGameObjectWithTag("Enemy").GetComponent<NavMeshAgent>();
-    Debug.Log("Agent is " + agent.ToString());
+    // P_NODES = new PatrolNode[9];
     AssignNearestNodes();
-    // UpdateDestination();
   }
 
-
-  // public void Update()
-  // {
-  //   if (isMoving && agent.remainingDistance < 1.0f)
-  //   { // moving close to the patrol point
-  //     isMoving = false;
-  //     if (isPatrolWaiting)
-  //     {
-  //       isWaiting = true;
-  //     }
-  //     else
-  //     {
-  //       ChangePatrolPoint();
-  //       UpdateDestination();
-  //     }
-      
-  //   }
-  // }
-
-  private void ChangePatrolPoint()
-  { // go foward or backward depending on random choice
-    currentNode = (currentNode + (UnityEngine.Random.Range(0.0f, 1.0f) < 0.1f ? -1 : 1)) % NODES.Length;
-  }
-
-  private void UpdateDestination()
+  public void Setup(FSMStatus fsmStatus)
   {
+    Debug.Log("Agent began patrolling");
+    this.fsmStatus = fsmStatus;
+    enemy.agent.speed = enemy.DEFAULT_SPEED + 1.0f;
     agent.SetDestination(P_NODES[currentNode].location);
   }
+
+  private void NextPatrolPoint()
+  { // update target node foward or backward depending on random choice
+    currentNode = (currentNode + (UnityEngine.Random.Range(0.0f, 1.0f) < 0.1f ? -1 : 1)) % P_NODES.Length;
+  }
+
+  public void Reset()
+  {
+    currentNode = 0;
+  }
+
+  public void RunUpdate(float deltaTime)
+  {
+    if (enemy.canSeePlayer)
+    {
+      fsmStatus.nextState = ENEMY_STATES.CHASE;
+      fsmStatus.transitionDue = true;
+      return;
+    }
+    if (agent.remainingDistance == 0.0f)
+    { // if we are at a node, wait 3s, goto next
+      if (waitTimes[0] > 0.0f)
+      {
+        Debug.Log($"Waiting at patrol node {currentNode}: {waitTimes[0]}");
+        waitTimes[0] -= deltaTime;
+        // Debug.Log("Remaining dist to node: " + agent.remainingDistance);
+        return;
+      }
+      NextPatrolPoint();
+      agent.SetDestination(P_NODES[currentNode].location);
+      waitTimes[0] = waitTimeAtNode;
+
+    }
+  }
+}
+
+
+
 
   // public Vector3 GetClosestNode(Vector3 pos)
   // {
@@ -117,4 +127,4 @@ public class EnemyPatrol : MonoBehaviour
   // {
 
   // }
-}
+

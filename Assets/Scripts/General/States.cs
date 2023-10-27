@@ -1,74 +1,147 @@
-using System.Buffers.Text;
-using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using UnityEditor.Build;
-using UnityEditor.Experimental.GraphView;
+using STMGR;
 using UnityEngine;
+using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine.AI;
 
 public abstract class State
 {
-    protected NavMeshAgent agent;
-    protected Transform player;
-    public virtual void exec() { }
+  // public GameManager gm = GameManager.Instance();
+  public EnemyController enemy;
+  public FSMStatus fsmStatus;
+  protected float updateInterval = 0.25f; 
+  public abstract void EnterState(FSMStatus fsmStatus);
+  public abstract void UpdateState(float deltaTime);
+  public abstract void ExitState();
 }
+
 
 public sealed class IdleState : State
 {
-    public override void exec()
+  private float[] waitTimes = new float[2]{
+    3.0f, 1.0f
+  };
+  public override void EnterState(FSMStatus fsmStatus)
+  {
+    this.fsmStatus = fsmStatus;
+    enemy.agent.speed = enemy.DEFAULT_SPEED;
+    Debug.Log("Enemy entered idle");
+  }
+
+  public override void UpdateState(float deltaTime)
+  {
+    if (enemy.canSeePlayer)
     {
-        Debug.Log("Enemy is idling");
+      Debug.Log("Saw player, will begin chasing");
+      fsmStatus.nextState = ENEMY_STATES.CHASE;
+      fsmStatus.transitionDue = true;
+      return;
     }
+    if (enemy.bored < 0.0f)
+    {
+      Debug.Log("Got bored, will begin patrolling");
+      fsmStatus.nextState = ENEMY_STATES.PATROL;
+      fsmStatus.transitionDue = true;
+      return;
+    }
+    waitTimes[0] -= deltaTime;
+    if (waitTimes[0] > 0.0f)
+    {
+      Debug.Log($"Waiting idle {waitTimes[0]}");
+      return;
+    }
+    else
+    {
+      Debug.Log("Finished idle waiting, will patrol");
+      fsmStatus.nextState = ENEMY_STATES.PATROL;
+      fsmStatus.transitionDue = true;
+    }
+  }
+
+  public override void ExitState()
+  {
+    enemy.bored = 1.0f;
+    Debug.Log("Enemy exited idle");
+  }
 }
 
 public sealed class PatrolState : State
 // sealed because we wont subclass further, tag for performance
 {
-  EnemyPatrol patrol;
-    // private float changeRoute = 1.0f;
-    // public PatrolState(NavMeshAgent agent_ptr, Transform player_ptr)
-    // {
-    //     agent = agent_ptr;
-    //     playerState = player_ptr;
-    //     NAME = "PATROL";
-    //     // find game objects with tag Node
-    //     GameObject[] spheres = GameObject.FindGameObjectsWithTag("Node");
-    //     for (int i = 0; i < 12; i++)
-    //     {
-    //         NODES[i] = spheres[i].transform.position;
-    //         Debug.Log("Sucess - spheres found");
-    //         break;
-    //         // new Vector3(Random.Range(-10.0f, 10.0f), 0.0f, Random.Range(-10.0f, 10.0f))
-    //     }
+  private EnemyPatrol patrol;
 
-    public override void exec()
-    {
-      Debug.Log("Enemy has entered the patrolling state");
-      
-    }
-}
-
-public sealed class ThinkingState : State
-{
-  public override void exec()
+  public override void EnterState(FSMStatus fsmStatus)
   {
-    Debug.Log("Agent is thinking");
+    this.fsmStatus = fsmStatus;
+    enemy.agent.speed = enemy.DEFAULT_SPEED;
+    patrol = enemy.patrol;
+    Debug.Log("Enemy entered patrol state");
+    patrol.Setup(fsmStatus);
   }
+  public override void UpdateState(float deltaTime)
+  {
+    patrol.RunUpdate(deltaTime);
+  }
+
+  public override void ExitState()
+  {
+    patrol.Reset();
+    enemy.bored = 1.0f;
+    Debug.Log("Enemy exited patrol");
+  }
+
+
 }
 
 public sealed class ChaseState : State
 {
-  public override void exec()
+  private float timeWhenLastSeen = 0.0f;
+  private float runningTimeSinceSeen = 0.0f;
+  public override void EnterState(FSMStatus fsmStatus)
   {
-    Debug.Log("Agent is chaising");
+    Debug.Log("Agent entered chaising");
+    enemy.agent.speed = enemy.DEFAULT_SPEED * 1.5f;
+    enemy.agent.SetDestination(enemy.playerSeen.lastPosition);
+    timeWhenLastSeen = enemy.playerSeen.lastSeenHeard;
   }
-}
 
-public sealed class AttackState : State
-{
-  public override void exec()
+  public override void UpdateState(float deltaTime)
   {
-    Debug.Log("Agent is attacking");
+    if (timeWhenLastSeen < enemy.playerSeen.lastSeenHeard)
+    {
+      timeWhenLastSeen = enemy.playerSeen.lastSeenHeard;
+      runningTimeSinceSeen = 0.0f;
+    }
+    if(enemy.canCapturePlayer)
+    {
+      GameManager.StopGame();
+    }
+    if (enemy.tired < 0.1f)
+    {
+      Debug.Log("Enemy tired: stoppped chaising");
+      enemy.agent.ResetPath();
+      fsmStatus.nextState = ENEMY_STATES.IDLE;
+      fsmStatus.transitionDue = true;
+      return;
+    }
+    if (enemy.agent.remainingDistance == 0.0f)
+    { // if enemy is at last player pos
+      runningTimeSinceSeen += deltaTime;
+    }
+    if (runningTimeSinceSeen > 5.0f)
+    {
+      Debug.Log("Waited 5s at last player pos: stop chaising, go to patrol");
+      fsmStatus.nextState = ENEMY_STATES.PATROL;
+      fsmStatus.transitionDue = true;
+      return;
+    }
+    enemy.agent.SetDestination(enemy.playerSeen.lastPosition);
+    enemy.tired -= 0.02f;
+  }
+  
+  public override void ExitState()
+  {
+    Debug.Log("Enemy exited chasing");
+    enemy.tired = 1.0f;
   }
 }

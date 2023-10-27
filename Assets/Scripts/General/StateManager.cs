@@ -1,16 +1,20 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEngine;
-
 namespace STMGR
 {
     public enum ENEMY_STATES
     {
         IDLE,
         PATROL,
-        THINK,
+        // THINK,
         CHASE,
-        ATTACK,
+        // ATTACK,
+        NUM_STATES
+  };
+  public class FSMStatus
+  {
+    
+    public bool sensingFinished;
+    public bool updateFinished;
+    public bool transitionDue;
+    public ENEMY_STATES nextState;
   };
 }
