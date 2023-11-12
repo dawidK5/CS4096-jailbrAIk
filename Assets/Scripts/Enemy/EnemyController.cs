@@ -13,6 +13,7 @@ public class EnemyController : MonoBehaviour
   public bool canSeePlayer = false;
   public bool canCapturePlayer = false;
   public bool sensingRunning;
+
   public struct PlayerSeen
   {
       public float lastSeenHeard;
