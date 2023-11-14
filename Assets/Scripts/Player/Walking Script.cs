@@ -26,12 +26,15 @@ public class PlayerController : MonoBehaviour
 
 
 
+
+
+
     // Start is called before the first frame update
     void Start()
     {
         //  Hide and lock the mouse cursor
-        Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
+        //Cursor.visible = false;
+        //Cursor.lockState = CursorLockMode.Locked;
     }
 
 
@@ -40,6 +43,7 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
         // Horizontal rotation
         transform.Rotate(Vector3.up * Input.GetAxis("Mouse X") * 5f);   // Adjust the multiplier for different rotation speed
 
@@ -57,6 +61,7 @@ public class PlayerController : MonoBehaviour
             }
         }
         rb.velocity = transform.TransformDirection(newVelocity);
+
     }
 
     void FixedUpdate()

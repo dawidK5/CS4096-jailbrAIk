@@ -4,49 +4,22 @@ using Unity.VisualScripting;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
-{ // Singleton for managing game
-// private static GameObject gameManagerObj;
-// private static GameManager instance;
-    // Start is called before the first frame update
-    // void Start()
-    // {
-        
-    // }
+{
+    public GameOverScreen gameOverScreen;
 
+    public void Start()
+    {
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+    }
 
-    // // Update is called once per frame
-    // void Update()
-    // {
-        
-    // }
-    // public void Awake()
-    // {
-    //   gameManagerObj = GameObject.FindGameObjectWithTag("GameMgr");
-    //   instance = gameManagerObj.GetComponent<GameManager>();
-    // }
-    // public static GameManager Instance()
-    // {
-    //   if (instance == null)
-    //   {
-    //     gameManagerObj = GameObject.FindGameObjectWithTag("GameMgr");
-    //     instance = gameManagerObj.GetComponent<GameManager>();
-    //   }
-    //   return instance;
-    // }
-
-    // public void RunCoroutine(IEnumerator coroutine)
-    // {
-    //   Debug.Log(coroutine.ToString());
-    //   StartCoroutine(coroutine);
-    // }
-
-    // public void EndCoroutine(IEnumerator coroutine)
-    // {
-    //   StopCoroutine(coroutine);
-    // }
+    public void GameOver()
+    {
+        gameOverScreen.Setup();
+    }
 
     public static void StopGame()
     {
-      UnityEditor.EditorApplication.isPlaying = false;
+        UnityEditor.EditorApplication.isPlaying = false;
     }
 }

@@ -43,7 +43,7 @@ public class SpotlightPatrol : MonoBehaviour
         }
         else
         {
-            Debug.Log(Vector3.Distance(transform.position, wp.position) );
+            //Debug.Log(Vector3.Distance(transform.position, wp.position) );
             transform.position = Vector3.MoveTowards(transform.position,wp.position,speed * Time.deltaTime);   
         }
     }
