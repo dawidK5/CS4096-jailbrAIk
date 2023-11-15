@@ -8,6 +8,7 @@ TagManager:
   - Enemy
   - GameMgr
   - Door
+  - Fart
   layers:
   - Default
   - TransparentFX
@@ -17,8 +18,8 @@ TagManager:
   - UI
   - ObstructionLayer
   - Door
-  - 
-  - 
+  - Smell
+  - DogEnemy
   - 
   - 
   - 
