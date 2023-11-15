@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6666359617571504640}
   - component: {fileID: 9081268145466441194}
   - component: {fileID: 4723311269423027040}
-  m_Layer: 7
+  m_Layer: 2
   m_Name: Trigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -30,7 +30,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 1.59}
-  m_LocalScale: {x: 3.99341, y: 0.66905, z: 3.2659}
+  m_LocalScale: {x: 5.26611, y: 0.93666995, z: 3.2659}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3455032928967845553}
@@ -130,7 +130,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2134231212307056549, guid: 86a7561344cd73745a43117528f55b90, type: 3}
       propertyPath: m_Name
-      value: DoorFrame Variant
+      value: DoorFrameTrigger
       objectReference: {fileID: 0}
     - target: {fileID: 6698477142238233172, guid: 86a7561344cd73745a43117528f55b90, type: 3}
       propertyPath: m_Layer

@@ -9,9 +9,10 @@ public class DoorTrigger : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        Debug.Log(other.gameObject.name);
         if (other.TryGetComponent<NavMeshAgent>(out NavMeshAgent agent))
         {
-
+            Debug.Log(agent.gameObject.name);
             AgentsInRange++;
             if (!Door.open)
             {
