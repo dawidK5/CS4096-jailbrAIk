@@ -1,12 +1,11 @@
 using UnityEngine;
 using UnityEngine.AI;
 using STMGR;
-using Unity.VisualScripting;
+using UnityEditor;
 
 public class EnemyController : MonoBehaviour
 {
   [Header("References")]
-  public float loopTime = 0.0f;
   public NavMeshAgent agent;
   public Transform player;
   public EnemyPatrol patrol;
@@ -24,16 +23,14 @@ public class EnemyController : MonoBehaviour
   // Motivational buckets
   public float bored = 1.0f;
   public float tired = 1.0f;
+  
   public float senseInterval;
-  private static readonly State[] allStates = new State[3];
-
   // const int PLAYER_MASK = 3;
-  const int OBSTRUCTION_MASK = 6;
-  float fovRadiusSq = 100.0f;
-  float fovHalfAngle = 45.0f;
-  public readonly float DEFAULT_SPEED = 3.0f;
-  Vector3 directionToPlayer;
-
+  const int OBSTRUCTION_MASK = 1 << 6;
+  const float fovRadiusSq = 100.0f;
+  public readonly float fovHalfAngle = 45.0f;
+  public readonly float DEFAULT_SPEED = 2.5f;
+  private Vector3 directionToPlayer;
 
 
   public void FixedUpdate()
@@ -44,7 +41,10 @@ public class EnemyController : MonoBehaviour
       FOVCheck();
       sensingRunning = false;
       senseInterval = 0.0f;
-      bored -= 0.03f;
+      if (bored > 0.0f)
+      {
+        bored -= 0.03f;
+      }
     }
     senseInterval += Time.fixedDeltaTime;
   }
@@ -82,8 +82,4 @@ public class EnemyController : MonoBehaviour
     //   Debug.Log("Player not seen");
     // }
   }
-
-
-
-
 }

@@ -17,14 +17,14 @@ public class StateMachine : MonoBehaviour
     nextState = ENEMY_STATES.IDLE,
   };
 
-  private static readonly State[] allStates = new State[(int)ENEMY_STATES.NUM_STATES]
+  private readonly State[] allStates = new State[(int)ENEMY_STATES.NUM_STATES]
   {
     new IdleState(),
     new PatrolState(),
     new ChaseState()
   };
 
-  [SerializeReference]
+  [SerializeField]
   EnemyController enemy;
 
   // Start is called before the first frame update

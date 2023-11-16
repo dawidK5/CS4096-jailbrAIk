@@ -25,7 +25,7 @@ public sealed class IdleState : State
   {
     this.fsmStatus = fsmStatus;
     enemy.agent.speed = enemy.DEFAULT_SPEED;
-    Debug.Log("Enemy entered idle");
+    Debug.Log($"Enemy {enemy.GetInstanceID()} entered idle");
   }
 
   public override void UpdateState(float deltaTime)
@@ -61,7 +61,7 @@ public sealed class IdleState : State
   public override void ExitState()
   {
     enemy.bored = 1.0f;
-    Debug.Log("Enemy exited idle");
+    Debug.Log($"Enemy {enemy.GetInstanceID()} exited idle");
   }
 }
 
@@ -75,7 +75,7 @@ public sealed class PatrolState : State
     this.fsmStatus = fsmStatus;
     enemy.agent.speed = enemy.DEFAULT_SPEED;
     patrol = enemy.patrol;
-    Debug.Log("Enemy entered patrol state");
+    Debug.Log($"Enemy {enemy.GetInstanceID()} entered patrol state");
     patrol.Setup(fsmStatus);
   }
   public override void UpdateState(float deltaTime)
@@ -87,7 +87,7 @@ public sealed class PatrolState : State
   {
     patrol.Reset();
     enemy.bored = 1.0f;
-    Debug.Log("Enemy exited patrol");
+    Debug.Log($"Enemy {enemy.GetInstanceID()} exited patrol");
   }
 
 
@@ -97,12 +97,14 @@ public sealed class ChaseState : State
 {
   private float timeWhenLastSeen = 0.0f;
   private float runningTimeSinceSeen = 0.0f;
+
   public override void EnterState(FSMStatus fsmStatus)
   {
-    Debug.Log("Agent entered chaising");
+    this.fsmStatus = fsmStatus;
+    Debug.Log($"Agent {enemy.GetInstanceID()} entered chaising");
     enemy.agent.speed = enemy.DEFAULT_SPEED * 1.5f;
     enemy.agent.SetDestination(enemy.playerSeen.lastPosition);
-    timeWhenLastSeen = enemy.playerSeen.lastSeenHeard;
+    timeWhenLastSeen = 0.0f; // enemy.playerSeen.lastSeenHeard;
   }
 
   public override void UpdateState(float deltaTime)
@@ -118,7 +120,7 @@ public sealed class ChaseState : State
     }
     if (enemy.tired < 0.1f)
     {
-      Debug.Log("Enemy tired: stoppped chaising");
+      Debug.Log($"Enemy {enemy.GetInstanceID()} tired: stoppped chaising");
       enemy.agent.ResetPath();
       fsmStatus.nextState = ENEMY_STATES.IDLE;
       fsmStatus.transitionDue = true;
@@ -130,7 +132,7 @@ public sealed class ChaseState : State
     }
     if (runningTimeSinceSeen > 5.0f)
     {
-      Debug.Log("Waited 5s at last player pos: stop chaising, go to patrol");
+      Debug.Log($"{enemy.GetInstanceID()} Stops chase aft 5s at last player pos, will patrol");
       fsmStatus.nextState = ENEMY_STATES.PATROL;
       fsmStatus.transitionDue = true;
       return;
@@ -141,7 +143,7 @@ public sealed class ChaseState : State
   
   public override void ExitState()
   {
-    Debug.Log("Enemy exited chasing");
+    Debug.Log($"Enemy {enemy.GetInstanceID()} exited chasing");
     enemy.tired = 1.0f;
   }
 }

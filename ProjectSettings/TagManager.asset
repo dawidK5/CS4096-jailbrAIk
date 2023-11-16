@@ -9,6 +9,7 @@ TagManager:
   - GameMgr
   - Door
   - Fart
+  - Item
   layers:
   - Default
   - TransparentFX

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using STMGR;
 using UnityEngine;
@@ -7,6 +8,7 @@ public class EnemyPatrol : MonoBehaviour
 {
   [SerializeField]
   public int currentNode = 0;
+  public int currentNeighbor = 0;
   const float waitTimeAtNode = 3.0f;
   // bool isPatrolWaiting = false;
   // bool isWaiting = false;
@@ -34,17 +36,19 @@ public class EnemyPatrol : MonoBehaviour
           Debug.Log("Dist " + i + " to " + j + " " + dist);
           if (dist < P_NODES[i].nearNodesRadiusSq)
           {
-            Debug.Log("Adding " + j + " to " + i);
+            Debug.Log("Attempt: add " + j + " to " + i);
             P_NODES[i].AddNear(P_NODES[j]);
           }
         }
       }
     }
   }
+  
   void Start()
   {
     // P_NODES = new PatrolNode[9];
     AssignNearestNodes();
+    Debug.Log($"--- {(-1)%10}");
   }
 
   public void Setup(FSMStatus fsmStatus)
@@ -52,12 +56,43 @@ public class EnemyPatrol : MonoBehaviour
     Debug.Log("Agent began patrolling");
     this.fsmStatus = fsmStatus;
     enemy.agent.speed = enemy.DEFAULT_SPEED + 1.0f;
+    currentNode = NearestNode();
     agent.SetDestination(P_NODES[currentNode].location);
+  }
+
+  private int NearestNode()
+  {
+    // Return the node nearest to the enemy
+    float nearestDistance = 99999.0f;
+    int closestNode = 0;
+    for (int i = 0; i < P_NODES.Length; i++)
+    {
+      float dist = Vector3.Distance(P_NODES[i].location, enemy.transform.position);
+      if (dist <= nearestDistance)
+      {
+        nearestDistance = dist;
+        closestNode = i;
+      }
+    }
+    return closestNode;
   }
 
   private void NextPatrolPoint()
   { // update target node foward or backward depending on random choice
-    currentNode = (currentNode + (UnityEngine.Random.Range(0.0f, 1.0f) < 0.1f ? -1 : 1)) % P_NODES.Length;
+    switch (UnityEngine.Random.Range(0.0f, 1.0f))
+    {
+      case < 0.1f:
+        PatrolNode p = P_NODES[currentNode];
+        currentNeighbor = UnityEngine.Random.Range(0, p.nearNodesIndex);
+        break;
+      case < 0.9f:
+        currentNode = Math.Min(currentNode + 1, P_NODES.Length - 1);
+        break;
+      default:
+        currentNode = Math.Max(currentNode - 1, 0);
+        break;
+    }
+    
   }
 
   public void Reset()
@@ -77,13 +112,23 @@ public class EnemyPatrol : MonoBehaviour
     { // if we are at a node, wait 3s, goto next
       if (waitTimes[0] > 0.0f)
       {
-        Debug.Log($"Waiting at patrol node {currentNode}: {waitTimes[0]}");
+        Debug.Log($"Waiting at patrol node {currentNode}: {waitTimes[0]}s left");
         waitTimes[0] -= deltaTime;
         // Debug.Log("Remaining dist to node: " + agent.remainingDistance);
         return;
       }
       NextPatrolPoint();
-      agent.SetDestination(P_NODES[currentNode].location);
+      try
+      {
+        agent.SetDestination(P_NODES[currentNode].location);
+      }
+      catch
+      {
+        Debug.Log($"Enemy {this} going to {currentNeighbor}th neighb of {currentNode}");
+        agent.SetDestination(P_NODES[currentNode].nearNodes[currentNeighbor].location);
+        // Debug.Log($"Enemy {this.name} cannot got to its node {currentNode}");
+        // throw new IndexOutOfRangeException();
+      }
       waitTimes[0] = waitTimeAtNode;
 
     }
