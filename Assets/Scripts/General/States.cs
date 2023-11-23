@@ -116,7 +116,7 @@ public sealed class ChaseState : State
     }
     if(enemy.canCapturePlayer)
     {
-      GameManager.StopGame();
+      //GameManager.StopGame();
     }
     if (enemy.tired < 0.1f)
     {

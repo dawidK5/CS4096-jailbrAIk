@@ -23,8 +23,7 @@ public class PlayerController : MonoBehaviour
     Vector3 newVelocity;
     bool isGrounded = false;
     bool isJumping = false;
-
-
+    public GameManager gameManager;
 
 
 
@@ -33,8 +32,9 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         //  Hide and lock the mouse cursor
-        //Cursor.visible = false;
-        //Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+
     }
 
 
@@ -120,5 +120,16 @@ public class PlayerController : MonoBehaviour
             angle = angleMin;
 
         return angle;
+    }
+public List<string> enemyLayers = new List<string> { "DogEnemy", "EnemyType2Layer", /* Add more layers as needed */ };
+
+    void OnTriggerEnter(Collider collision) {
+        Debug.Log("hit at : " + collision.gameObject.name);
+        
+        if (enemyLayers.Contains(LayerMask.LayerToName(collision.gameObject.layer)))
+        {
+            Debug.Log("Player hit by " + collision.gameObject.name);
+            gameManager.gameOverScreen.Setup();
+        }
     }
 }
