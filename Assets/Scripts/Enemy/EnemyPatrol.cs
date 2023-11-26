@@ -112,7 +112,7 @@ public class EnemyPatrol : MonoBehaviour
     { // if we are at a node, wait 3s, goto next
       if (waitTimes[0] > 0.0f)
       {
-        Debug.Log($"Waiting at patrol node {currentNode}: {waitTimes[0]}s left");
+        //Debug.Log($"Waiting at patrol node {currentNode}: {waitTimes[0]}s left");
         waitTimes[0] -= deltaTime;
         // Debug.Log("Remaining dist to node: " + agent.remainingDistance);
         return;
@@ -124,7 +124,7 @@ public class EnemyPatrol : MonoBehaviour
       }
       catch
       {
-        Debug.Log($"Enemy {this} going to {currentNeighbor}th neighb of {currentNode}");
+        //Debug.Log($"Enemy {this} going to {currentNeighbor}th neighb of {currentNode}");
         agent.SetDestination(P_NODES[currentNode].nearNodes[currentNeighbor].location);
         // Debug.Log($"Enemy {this.name} cannot got to its node {currentNode}");
         // throw new IndexOutOfRangeException();

@@ -22,8 +22,6 @@ public class SpotLightBT : BehaviourTree.Tree
             }),
             new TaskPatrol(transform, waypoints),
         });
-        Debug.Log("Never");
-        //Node root = new TaskPatrol(transform, waypoints);
         
         return root;
     }

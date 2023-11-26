@@ -22,9 +22,9 @@ public class FieldOfView : MonoBehaviour
     public Vector3 playerLastSeenPostion;
     public Vector3 lastSmelledPosition;
     public Transform head;
-
+    public float timePlayerLastSeen = 0f;
     public bool canSeePlayer;
-
+    
     public bool canSmellPlayer;
 
     public bool canHearOtherEnemy;
@@ -229,6 +229,7 @@ public class FieldOfView : MonoBehaviour
                 {
                     //Debug.Log("can see Path");
                     canSeePlayer = true;
+                    timePlayerLastSeen = Time.fixedTime;
                     playerLastSeenPostion = target.position;
 
                 }

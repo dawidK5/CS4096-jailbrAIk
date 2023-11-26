@@ -39,6 +39,7 @@ public class TaskPatrol : Node
         {
 
             Transform wp = pNodes[currentWaypointIndex];
+            
             if (Vector3.Distance(_transform.position, wp.position) < 0.1f)
             {
                 _transform.position = wp.position; ;
