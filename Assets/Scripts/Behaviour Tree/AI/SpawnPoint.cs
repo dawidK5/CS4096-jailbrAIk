@@ -6,6 +6,7 @@ public class SpawnPoint : MonoBehaviour
 {
     public Transform transformRef;
     public Vector3 spawnPosition;
+
     // Start is called before the first frame update
     void Start()
     {
