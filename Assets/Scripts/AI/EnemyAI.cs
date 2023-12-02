@@ -10,6 +10,8 @@ public class EnemyAI : MonoBehaviour
 
     [SerializeField]
     private List<Detector> detectors;
+    [SerializeField]
+    private Rigidbody rb;
 
     [SerializeField]
     private AIData aiData;
@@ -36,6 +38,7 @@ public class EnemyAI : MonoBehaviour
     {
         //Detecting Player and Obstacles around
         InvokeRepeating("PerformDetection", 0, detectionDelay);
+        rb = GetComponent<Rigidbody>();
     }
 
     private void PerformDetection()
@@ -73,6 +76,7 @@ public class EnemyAI : MonoBehaviour
         }
         //Moving the Agent
         OnMovementInput?.Invoke(movementInput);
+        rb.velocity = movementInput * 2f;
     }
 
     private IEnumerator ChaseAndAttack()
@@ -101,6 +105,7 @@ public class EnemyAI : MonoBehaviour
             {
                 //Chase logic
                 movementInput = movementDirectionSolver.GetDirectionToMove(steeringBehaviours, aiData);
+
                 yield return new WaitForSeconds(aiUpdateDelay);
                 StartCoroutine(ChaseAndAttack());
             }
