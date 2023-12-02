@@ -9,7 +9,7 @@ public class DogPatrol : Node
     private Transform _transform;
     private Transform[] _waypoints;
     private int _currentWaypointIndex = 0;
-    private float _waitTime = 8f; // in seconds
+    private float _waitTime = 20f; // in seconds
     private float _waitCounter = 0f;
     private bool _waiting = false;
     private NavMeshAgent _navMeshAgent;
@@ -49,7 +49,7 @@ public class DogPatrol : Node
             //    _transform.LookAt(wp.position);
             //}
 
-            if (Vector3.Distance(_transform.position, target) < 0.2f)
+            if (Vector3.Distance(_transform.position, target) < 0.8f)
             {
                 _waitCounter = 0f;
                 _waiting = true;

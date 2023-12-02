@@ -34,7 +34,7 @@ public class FieldOfView : MonoBehaviour
     public float meshResolution;
     public float edgeDstThreshold;
     public int edgeResolveIterations;
-
+    public float playerLastLocatedTime = 0.0f;
     private void Start()
     {
         playerRef = GameObject.FindGameObjectWithTag("Player");
@@ -231,7 +231,7 @@ public class FieldOfView : MonoBehaviour
                     canSeePlayer = true;
                     timePlayerLastSeen = Time.fixedTime;
                     playerLastSeenPostion = target.position;
-
+                    playerLastLocatedTime = Time.time;
                 }
                 else
                     canSeePlayer = false;
@@ -262,7 +262,7 @@ public class FieldOfView : MonoBehaviour
                     Debug.Log("can smell Player");
                     canSmellPlayer = true;
                     lastSmelledPosition = target.position;
-
+                    playerLastLocatedTime = Time.time;
                 }
                 //else
                 //    canSmellPlayer = false;

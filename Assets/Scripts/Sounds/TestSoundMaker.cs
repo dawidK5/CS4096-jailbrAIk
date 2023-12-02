@@ -12,18 +12,18 @@ namespace GamePlay
         void Update()
         {
 
-            if (Input.GetKeyDown(KeyCode.A))
-            {
-                Debug.Log("A pressed");
-                if (source.isPlaying) //If already playing a sound, don't allow overlapping sounds 
-                    return;
+            // if (Input.GetKeyDown(KeyCode.A))
+            // {
+            //     Debug.Log("A pressed");
+            //     if (source.isPlaying) //If already playing a sound, don't allow overlapping sounds 
+            //         return;
 
-                source.Play();
+            //     source.Play();
 
-                var sound = new Sound(transform.position, soundRange, soundType);
+            //     var sound = new Sound(transform.position, soundRange, soundType);
 
-                Sounds.MakeSound(sound);
-            }
+            //     Sounds.MakeSound(sound);
+            // }
 
 
         }
