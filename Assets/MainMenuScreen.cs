@@ -12,6 +12,6 @@ public class MainMenuScreen : MonoBehaviour
 
     public void StartButton() {
         Debug.Log("Start called");
-        SceneManager.LoadScene("InitialScene");
+        SceneManager.LoadScene("TutorialScene");
     }
 }
