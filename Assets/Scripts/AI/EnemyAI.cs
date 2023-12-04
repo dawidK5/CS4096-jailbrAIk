@@ -20,13 +20,6 @@ public class EnemyAI : MonoBehaviour
     private float detectionDelay = 0.05f, aiUpdateDelay = 0.06f, attackDelay = 1f;
 
     [SerializeField]
-    private float attackDistance = 0.5f;
-
-    //Inputs sent from the Enemy AI to the Enemy controller
-    public UnityEvent OnAttackPressed;
-    public UnityEvent<Vector3> OnMovementInput, OnPointerInput;
-
-    [SerializeField]
     private Vector3 movementInput;
 
     [SerializeField]
@@ -47,7 +40,8 @@ public class EnemyAI : MonoBehaviour
         {
             detector.Detect(aiData);
         }
-
+        
+        // display thev results of detection in the game
         float[] danger = new float[8];
         float[] interest = new float[8];
         foreach (SteeringBehaviour behaviour in steeringBehaviours)
@@ -62,7 +56,6 @@ public class EnemyAI : MonoBehaviour
         if (aiData.currentTarget != null)
         {
             //Looking at the Target
-            OnPointerInput?.Invoke(aiData.currentTarget.position);
             if (following == false)
             {
                 following = true;
@@ -74,9 +67,7 @@ public class EnemyAI : MonoBehaviour
             //Target acquisition logic
             aiData.currentTarget = aiData.targets[0];
         }
-        //Moving the Agent
-        OnMovementInput?.Invoke(movementInput);
-        rb.velocity = movementInput * 2f;
+        
     }
 
     private IEnumerator ChaseAndAttack()
@@ -91,21 +82,10 @@ public class EnemyAI : MonoBehaviour
         }
         else
         {
-            float distance = Vector3.Distance(aiData.currentTarget.position, transform.position);
-
-            if (distance < attackDistance)
+            //Chase logic
             {
-                //Attack logic
-                movementInput = Vector3.zero;
-                OnAttackPressed?.Invoke();
-                yield return new WaitForSeconds(attackDelay);
-                StartCoroutine(ChaseAndAttack());
-            }
-            else
-            {
-                //Chase logic
                 movementInput = movementDirectionSolver.GetDirectionToMove(steeringBehaviours, aiData);
-
+                rb.velocity = movementInput * 2f;
                 yield return new WaitForSeconds(aiUpdateDelay);
                 StartCoroutine(ChaseAndAttack());
             }
