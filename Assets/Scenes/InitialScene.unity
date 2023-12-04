@@ -4835,7 +4835,7 @@ GameObject:
   m_Component:
   - component: {fileID: 725356507}
   - component: {fileID: 725356508}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: TargetDetector
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5438,8 +5438,9 @@ GameObject:
   - component: {fileID: 788000734}
   - component: {fileID: 788000736}
   - component: {fileID: 788000737}
-  m_Layer: 0
-  m_Name: E1
+  - component: {fileID: 788000738}
+  m_Layer: 9
+  m_Name: Warden
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5527,7 +5528,7 @@ Transform:
   m_GameObject: {fileID: 788000729}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -20.18, y: 7.93, z: 113.74}
+  m_LocalPosition: {x: -20.18, y: 3.51, z: 112.25}
   m_LocalScale: {x: 1.25, y: 1.25, z: 1.25}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -5575,16 +5576,6 @@ MonoBehaviour:
   detectionDelay: 0.05
   aiUpdateDelay: 0.06
   attackDelay: 1
-  attackDistance: 0.5
-  OnAttackPressed:
-    m_PersistentCalls:
-      m_Calls: []
-  OnMovementInput:
-    m_PersistentCalls:
-      m_Calls: []
-  OnPointerInput:
-    m_PersistentCalls:
-      m_Calls: []
   movementInput: {x: 0, y: 0, z: 0}
   movementDirectionSolver: {fileID: 1542795445}
 --- !u!195 &788000736
@@ -5636,6 +5627,29 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!136 &788000738
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 788000729}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Height: 2
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &792310005
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7032,6 +7046,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1020037186}
   - component: {fileID: 1020037187}
+  - component: {fileID: 1020037188}
   m_Layer: 3
   m_Name: SpawnFart
   m_TagString: Untagged
@@ -7071,6 +7086,103 @@ MonoBehaviour:
   maxFartometer: 1
   currentFartometer: 0
   fartometer: {fileID: 1947990759}
+  source: {fileID: 1020037188}
+--- !u!82 &1020037188
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1020037185}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: b756a98ebafaa4140a07e6a7327668ce, type: 3}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1001 &1021331315
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9126,7 +9238,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1257084689}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: SteeringBehaviours
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10837,7 +10949,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1386468147}
   - component: {fileID: 1386468148}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: ObstacleAvoidance
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12440,7 +12552,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1542795444}
   - component: {fileID: 1542795445}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: ContextSolver
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14470,7 +14582,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1741321165}
   - component: {fileID: 1741321166}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: ObstacleDetector
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14650,7 +14762,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: a924461074f864f218d4e94c4f724a3b, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 77b52d0d171354c0991e816e419a35ee, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -15675,7 +15787,7 @@ PrefabInstance:
       objectReference: {fileID: 608236110}
     - target: {fileID: 3994937457788833836, guid: 937bec22c44972f439a27f29d3357414, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -23.11
+      value: 2.2
       objectReference: {fileID: 0}
     - target: {fileID: 3994937457788833836, guid: 937bec22c44972f439a27f29d3357414, type: 3}
       propertyPath: m_LocalPosition.y
@@ -15683,7 +15795,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3994937457788833836, guid: 937bec22c44972f439a27f29d3357414, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 107.39
+      value: 4.4
       objectReference: {fileID: 0}
     - target: {fileID: 3994937457788833836, guid: 937bec22c44972f439a27f29d3357414, type: 3}
       propertyPath: m_LocalRotation.w
@@ -17515,7 +17627,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2052148491}
   - component: {fileID: 2052148492}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: SeekBehaviour
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -18581,6 +18693,10 @@ PrefabInstance:
       propertyPath: playerRef
       value: 
       objectReference: {fileID: 1811847069}
+    - target: {fileID: 7999933917552294919, guid: 1875c6edb8c2d40fc9765a0744d253be, type: 3}
+      propertyPath: m_PlayOnAwake
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8041683026395537709, guid: 1875c6edb8c2d40fc9765a0744d253be, type: 3}
       propertyPath: target
       value: 
