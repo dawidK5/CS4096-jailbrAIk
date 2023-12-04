@@ -15,6 +15,9 @@ public class SpawnFart : MonoBehaviour
     public float maxFartometer = 1f;
     public float currentFartometer = 0f;
     public Fartometer fartometer;
+
+    [SerializeField] 
+    private AudioSource source;
     // Start is called before the first frame update
     void Start()
     {
@@ -37,6 +40,7 @@ private float decrementPerSecond;
             newSpawnedObject.SetActive(true);
             currentFartometer = maxFartometer;
             fartometer.setMaxFartometer(maxFartometer);
+            source.Play();
             fartTime = 0.0f;
             decrementPerSecond = currentFartometer / fartInterval;
         }

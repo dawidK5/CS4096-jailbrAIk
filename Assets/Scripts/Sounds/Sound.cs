@@ -17,7 +17,7 @@ namespace GamePlay
         
         public readonly SoundType soundType;
         
-        public readonly Vector3 pos;
+        public Vector3 pos;
 
         /// <summary>
         /// This the intensity of the sound.
