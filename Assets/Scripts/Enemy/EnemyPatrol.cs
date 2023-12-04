@@ -51,7 +51,6 @@ public class EnemyPatrol : MonoBehaviour
   {
     // P_NODES = new PatrolNode[9];
     // AssignNearestNodes();
-    Debug.Log($"--- {(-1)%10}");
   }
 
   public void Setup(FSMStatus fsmStatus)
@@ -93,9 +92,9 @@ public class EnemyPatrol : MonoBehaviour
           // go to neighbour of current node
           PatrolNode p = P_NODES[currentNode];
           currentNeighbor = UnityEngine.Random.Range(0, p.nearNodesIndex);
-          Debug.Log($"E_{enemyId}@NPP: try neighbour {currentNeighbor} of PN_{p.nodeId}");
+          // Debug.Log($"E_{enemyId}@NPP: try neighbour {currentNeighbor} of PN_{p.nodeId}");
           nodeBusy = P_NODES[currentNode].nearNodes[currentNeighbor].occupied;
-          Debug.Log($"E_{enemyId}@NPP: try neighbour | success:{!nodeBusy}");
+          // Debug.Log($"E_{enemyId}@NPP: try neighbour | success:{!nodeBusy}");
           break;
         case < 0.8f:
           currentNeighbor = -1;
@@ -108,7 +107,7 @@ public class EnemyPatrol : MonoBehaviour
             currentNode = 0;
           }
           nodeBusy = P_NODES[currentNode].occupied;
-          Debug.Log($"E_{enemyId}@NPP: try next node | success:{!nodeBusy}");
+          // Debug.Log($"E_{enemyId}@NPP: try next node | success:{!nodeBusy}");
           break;
         default:
           currentNeighbor = -1;
