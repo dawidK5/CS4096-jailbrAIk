@@ -1,20 +1,30 @@
 using UnityEngine;
 using UnityEditor;
 using System;
+using System.Collections.Generic;
 public class PatrolNode : MonoBehaviour
 {
  
   [SerializeField]
-  public float nearNodesRadiusSq = 210.0f;  // square of the value
-  public PatrolNode[] nearNodes = new PatrolNode[MAX_SLOTS];
+  public float nearNodesRadiusSq;  // square of the value
+  public List<PatrolNode> nearNodes;
   public Vector3 location; // duplicated for ease of access
   public int nearNodesIndex = 0;
-  public float radius = 0.5f;
+  public float radius;
+  public int nodeId;
   const int MAX_SLOTS = 9;
+  public bool occupied = false;
+  
+  
+
   public void Awake()
   {
     location = this.GetComponent<Transform>().position;
-    nearNodes = new PatrolNode[9];
+    nearNodes = new List<PatrolNode>(MAX_SLOTS);
+    // nearNodesRadiusSq = radius * radius;
+    // repeated for MonoBehaviour handling and avoiding index errors
+    nodeId = Utils.getId(name);
+    
   }
 
   // public void Start()
@@ -32,7 +42,7 @@ public class PatrolNode : MonoBehaviour
   private void OnDrawGizmos()
   {
     Handles.color = Color.red;
-    Handles.DrawWireDisc(location, Vector3.up, 14.49f);
+    Handles.DrawWireDisc(location, Vector3.up, radius);
   }
 
   public void AddNear(PatrolNode pn)
@@ -40,7 +50,8 @@ public class PatrolNode : MonoBehaviour
     if (nearNodesIndex < MAX_SLOTS)
     {
       Debug.Log("Adding at " + nearNodesIndex + " to " + this.ToString());
-      nearNodes[nearNodesIndex] = pn;
+      // nearNodes[nearNodesIndex] = pn;
+      nearNodes.Add(pn);
       nearNodesIndex++;
     }
   }

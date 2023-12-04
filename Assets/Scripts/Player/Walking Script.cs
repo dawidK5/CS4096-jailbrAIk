@@ -121,7 +121,7 @@ public class PlayerController : MonoBehaviour
 
         return angle;
     }
-public List<string> enemyLayers = new List<string> { "DogEnemy", "EnemyType2Layer", /* Add more layers as needed */ };
+public List<string> enemyLayers = new List<string> { "DogEnemy", "Guard", /* Add more layers as needed */ };
 
     void OnTriggerEnter(Collider collision) {
         Debug.Log("hit at : " + collision.gameObject.name);

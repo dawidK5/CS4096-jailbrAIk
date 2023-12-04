@@ -7,27 +7,80 @@ public class ItemScript : MonoBehaviour
   [SerializeField]
   public Transform playerRef;
   public float maxDist = 2.0f;
-  
+  public bool inTrigger = false;
   private PickupScreen ps;
   private RaycastHit hit;
 
-  void Update()
+  // void Update()
+  // {
+  //   if (Input.GetKeyDown(KeyCode.J))
+  //   {
+  //     Pressed();
+  //   }
+  // }
+
+  public bool FacingObject()
   {
-    if (Input.GetKeyDown(KeyCode.J))
+    Debug.DrawRay(playerRef.transform.position, playerRef.transform.forward, Color.red);
+
+    if (Physics.Raycast(playerRef.transform.position, playerRef.transform.forward, out hit, maxDist, 1<<11))
     {
-      Pressed();
+      Debug.Log($"Item: raycast tag: {hit.transform.tag}");
+      if (hit.transform.tag == "Item")
+      {
+        return true;
+        // ps = hit.collider.GetComponent<PickupScreen>();
+        // ps.SendMessage("Pickup", hit.collider.name);
+      }
+    }
+    Debug.Log("Item: no raycast");
+    return false;
+  }
+  public void OnTriggerEnter(Collider other)
+  {
+    Debug.Log($"ItemScript@OTen: collider {other.tag}");
+    if (other.CompareTag("Player"))
+    {
+      Debug.Log("Player entered item trigger");
+      inTrigger = true;
+      StartCoroutine("CheckIfPressedAndLooking");
+      // while(inTrigger)
+      // {
+      //   if (Input.GetKeyDown(KeyCode.J))
+      //   {
+      //     Debug.Log("ItemScript@OTEn: J pressed");
+      //     if (FacingObject())
+      //     {
+      //       Debug.Log("Item picked up");
+      //       break;
+          
+      //     }
+      //   }
+      // }
     }
   }
 
-  void Pressed()
+  IEnumerator CheckIfPressedAndLooking()
   {
-    if (Physics.Raycast(playerRef.transform.position, playerRef.transform.forward, out hit, maxDist))
+    WaitForFixedUpdate wait = new WaitForFixedUpdate();
+    while (true)
     {
-      if (hit.transform.tag == "Item")
+      yield return wait;
+      if (Input.GetKeyDown(KeyCode.J))
       {
-        ps = hit.collider.GetComponent<PickupScreen>();
-        ps.SendMessage("Pickup", hit.collider.name);
+        Debug.Log("ItemScript@OTEn: J pressed");
+        if (FacingObject())
+        {
+          Debug.Log("Item picked up");
+          StopCoroutine("CheckIfPressedAndLooking");
+        }
       }
     }
+  }
+    
+  public void OnTriggerExit(Collider other)
+  {
+    inTrigger = false;
+    Debug.Log("Item trigger left");
   }
 }

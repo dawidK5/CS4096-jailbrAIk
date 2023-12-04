@@ -41,7 +41,10 @@ public class FieldOfView : MonoBehaviour
         viewMesh = new Mesh();
         viewMesh.name = "View Mesh";
         viewMeshFilter.mesh = viewMesh;
-        StartCoroutine(FOVRoutine());
+        if (name.Contains("Dog"))
+        {
+          StartCoroutine(FOVRoutine());
+        }
     }
 
     void LateUpdate()
@@ -55,8 +58,6 @@ public class FieldOfView : MonoBehaviour
         while (true)
         {
             yield return wait;
-            
-
             FieldOfViewCheck();
             FieldOfSmellCheck();
             PlayerDetected();

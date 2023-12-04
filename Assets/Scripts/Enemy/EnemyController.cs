@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using STMGR;
 using UnityEditor;
+using System;
 
 public class EnemyController : MonoBehaviour
 {
@@ -9,6 +10,7 @@ public class EnemyController : MonoBehaviour
   public NavMeshAgent agent;
   public Transform player;
   public EnemyPatrol patrol;
+  public int enemyId = 0;
   public bool canSeePlayer = false;
   public bool canCapturePlayer = false;
   public bool sensingRunning;
@@ -27,15 +29,20 @@ public class EnemyController : MonoBehaviour
   public float senseInterval;
   // const int PLAYER_MASK = 3;
   const int OBSTRUCTION_MASK = 1 << 6;
-  const float fovRadiusSq = 100.0f;
-  public readonly float fovHalfAngle = 45.0f;
+  const float fovRadiusSq = 205.25f;
+  public readonly float fovHalfAngle = 47.5f;
   public readonly float DEFAULT_SPEED = 2.5f;
   private Vector3 directionToPlayer;
+  public FieldOfView fov;
 
+  void Awake()
+  {
+    enemyId = Utils.getId(name);
+  }
 
   public void FixedUpdate()
   {
-    if (senseInterval > 0.25f)
+    if (senseInterval > 0.125f)
     {
       sensingRunning = true;
       FOVCheck();
@@ -68,12 +75,12 @@ public class EnemyController : MonoBehaviour
           if (directionToPlayer.sqrMagnitude < 2.0f)
           {
             canCapturePlayer = true;
-            Debug.Log("Player captured");
+            Debug.Log($"EC@FOVC: Player captured by E_{enemyId}");
           }
         }
         else
         {
-          Debug.Log("Player behind a wall");
+          Debug.Log($"EC@FOVC: E_{enemyId} player not detected (behind wall)");
         }
       }
     }
