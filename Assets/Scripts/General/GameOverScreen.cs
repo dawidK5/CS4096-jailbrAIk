@@ -9,11 +9,12 @@ public class GameOverScreen : MonoBehaviour
     public void Setup()
     {
         gameObject.SetActive(true);
-
+        Time.timeScale = 0;
     }
 
     public void Restart()
     {
+        Time.timeScale = 1;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
@@ -29,6 +30,7 @@ public class GameOverScreen : MonoBehaviour
 
     public void MainMenu()
     {
+        Time.timeScale = 1;
         SceneManager.LoadScene(0);
     }
 
