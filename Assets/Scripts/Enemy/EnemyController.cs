@@ -72,11 +72,15 @@ public class EnemyController : MonoBehaviour
           // update player seen
           playerSeen.lastSeenHeard = Time.time;
           playerSeen.lastPosition = player.position;
-          if (directionToPlayer.sqrMagnitude < 2.0f)
-          {
-            canCapturePlayer = true;
-            Debug.Log($"EC@FOVC: Player captured by E_{enemyId}");
-          }
+          // if (directionToPlayer.sqrMagnitude < 2.0f)
+          // {
+          //   canCapturePlayer = true;
+          //   Debug.Log($"EC@FOVC: Player captured by E_{enemyId}");
+          // }
+          // while(canSeePlayer)
+          // {
+          //   player.forward
+          // }
         }
         else
         {

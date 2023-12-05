@@ -30,7 +30,7 @@ public class PatrolNode : MonoBehaviour
   // public void Start()
   // {
   //   Debug.Log("List " + nearNodes);
-  //   // Debug.Log($"Dist is {Vector3.Distance(new Vector3(19,0,6), new Vector3(27,0,-4))}");
+  //   Debug.Log($"Dist is {Vector3.Distance(new Vector3(19,0,6), new Vector3(27,0,-4))}");
   // }
 
   // public virtual void OnDrawGizmos()

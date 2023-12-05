@@ -28,13 +28,16 @@ public class StateMachine : MonoBehaviour
   EnemyController enemy;
 
   // Start is called before the first frame update
-  void Start()
+  void Awake()
   {
     foreach (State st in allStates)
     {
       st.enemy = this.enemy;
     }
     currentState = ENEMY_STATES.IDLE;
+  }
+  void Start()
+  {
     allStates[(int)currentState].EnterState(fsmStatus);
   }
 
@@ -49,7 +52,7 @@ public class StateMachine : MonoBehaviour
       else
       {
         allStates[(int)currentState].UpdateState(loopTime);
-        // Debug.Log($"Executed in FSM: {loopTime}");
+        Debug.Log($"Executed in FSM: {loopTime}");
         loopTime = 0.0f;
       }
     }

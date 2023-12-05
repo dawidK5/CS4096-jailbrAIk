@@ -24,12 +24,10 @@ public class PlayerController : MonoBehaviour
     bool isGrounded = false;
     bool isJumping = false;
     public GameManager gameManager;
+    public static readonly List<string> enemyLayers = new List<string> {"DogEnemy", "Guard"}; /* Add more layers as needed */
 
-
-
-
-    // Start is called before the first frame update
-    void Start()
+  // Start is called before the first frame update
+  void Start()
     {
         //  Hide and lock the mouse cursor
         Cursor.visible = false;
@@ -121,10 +119,10 @@ public class PlayerController : MonoBehaviour
 
         return angle;
     }
-public List<string> enemyLayers = new List<string> { "DogEnemy", "Guard", /* Add more layers as needed */ };
+
 
     void OnTriggerEnter(Collider collision) {
-        Debug.Log("hit at : " + collision.gameObject.name);
+        Debug.Log("hit at : " + collision.gameObject.name + LayerMask.LayerToName(collision.gameObject.layer));
         
         if (enemyLayers.Contains(LayerMask.LayerToName(collision.gameObject.layer)))
         {

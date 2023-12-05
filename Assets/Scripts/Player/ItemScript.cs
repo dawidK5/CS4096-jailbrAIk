@@ -39,7 +39,7 @@ public class ItemScript : MonoBehaviour
   public void OnTriggerEnter(Collider other)
   {
     Debug.Log($"ItemScript@OTen: collider {other.tag}");
-    if (other.CompareTag("Player"))
+    if (other.CompareTag("Item"))
     {
       Debug.Log("Player entered item trigger");
       inTrigger = true;
@@ -78,9 +78,9 @@ public class ItemScript : MonoBehaviour
     }
   }
     
-  public void OnTriggerExit(Collider other)
-  {
-    inTrigger = false;
-    Debug.Log("Item trigger left");
-  }
+  // public void OnTriggerExit(Collider other)
+  // {
+  //   inTrigger = false;
+  //   Debug.Log("Item trigger left");
+  // }
 }

@@ -1,7 +1,9 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using STMGR;
 using Unity.VisualScripting;
+using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -92,9 +94,21 @@ public class EnemyPatrol : MonoBehaviour
           // go to neighbour of current node
           PatrolNode p = P_NODES[currentNode];
           currentNeighbor = UnityEngine.Random.Range(0, p.nearNodesIndex);
-          // Debug.Log($"E_{enemyId}@NPP: try neighbour {currentNeighbor} of PN_{p.nodeId}");
-          nodeBusy = P_NODES[currentNode].nearNodes[currentNeighbor].occupied;
-          // Debug.Log($"E_{enemyId}@NPP: try neighbour | success:{!nodeBusy}");
+          Debug.Log($"E_{enemyId}@NPP: try neighbour {currentNeighbor} of PN_{p.nodeId}");
+          try
+          {
+            nodeBusy = P_NODES[currentNode].nearNodes[currentNeighbor].occupied;
+            Debug.Log($"E_{enemyId}@NPP: try neighbour | success:{!nodeBusy}");
+          }
+          catch
+          {
+            List<string> allNeighbours = new List<string>(); 
+            foreach (PatrolNode pn in P_NODES[currentNode].nearNodes)
+            {
+              allNeighbours.Add(pn.nodeId.ToString());
+            }
+            Debug.LogError($"ERROR: E_{enemyId}@NPP {currentNode}th neighbours: {String.Join(",",allNeighbours)}");
+          }
           break;
         case < 0.8f:
           currentNeighbor = -1;
@@ -107,7 +121,7 @@ public class EnemyPatrol : MonoBehaviour
             currentNode = 0;
           }
           nodeBusy = P_NODES[currentNode].occupied;
-          // Debug.Log($"E_{enemyId}@NPP: try next node | success:{!nodeBusy}");
+          Debug.Log($"E_{enemyId}@NPP: try next node | success:{!nodeBusy}");
           break;
         default:
           currentNeighbor = -1;
@@ -146,7 +160,7 @@ public class EnemyPatrol : MonoBehaviour
     { // if we are at a node, wait 3s, goto next
       if (waitTimes[0] > 0.0f)
       {
-        // Debug.Log($"E_{enemyId}@RU: Waiting at patrol node {currentNode}: {waitTimes[0]}s left");
+        Debug.Log($"E_{enemyId}@RU: Waiting at patrol node {currentNode}: {waitTimes[0]}s left");
         waitTimes[0] -= deltaTime;
         // Debug.Log("Remaining dist to node: " + agent.remainingDistance);
         return;
@@ -174,7 +188,7 @@ public class EnemyPatrol : MonoBehaviour
         P_NODES[currentNode].nearNodes[currentNeighbor].occupied = true;
       }
       
-        // Debug.Log($"Enemy {this.name} cannot got to its node {currentNode}");
+        Debug.Log($"Enemy {this.name} cannot got to its node {currentNode}");
         // throw new IndexOutOfRangeException();
       }
       waitTimes[0] = waitTimeAtNode;
