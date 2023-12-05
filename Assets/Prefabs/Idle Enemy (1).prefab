@@ -18,7 +18,8 @@ GameObject:
   - component: {fileID: 1742745972725158927}
   - component: {fileID: 6940363005696772178}
   - component: {fileID: 3300229336372644418}
-  m_Layer: 0
+  - component: {fileID: 5840308953630055328}
+  m_Layer: 9
   m_Name: Idle Enemy (1)
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -107,6 +108,7 @@ MonoBehaviour:
   meshResolution: 1
   edgeDstThreshold: 0
   edgeResolveIterations: 0
+  playerLastLocatedTime: 0
 --- !u!114 &8623529228667952384
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -250,6 +252,29 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   transformRef: {fileID: 5003689949909988017}
   spawnPosition: {x: 0, y: 0, z: 0}
+--- !u!136 &5840308953630055328
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5026114094066106637}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Height: 2
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &9192451357137936758
 GameObject:
   m_ObjectHideFlags: 0

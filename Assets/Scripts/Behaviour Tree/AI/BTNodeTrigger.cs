@@ -14,7 +14,8 @@ public class BTNodeTrigger : MonoBehaviour
     public int alertRadius = 200;
     public bool alertState = false;
     public float timeToDisengage = 3f;
-    public Transform lastPlayerPosition;
+    public AudioSource audioSource;
+    public Vector3 lastPlayerPosition;
 
     // Start is called before the first frame update
     void Start()
@@ -44,7 +45,7 @@ public class BTNodeTrigger : MonoBehaviour
                     }
                     else
                     {
-                        enemy.GetComponent<Alertable>().SendMessage("Alert", lastPlayerPosition.position);
+                        enemy.GetComponent<Alertable>().SendMessage("Alert", lastPlayerPosition);
                     }
 
                 }
@@ -58,7 +59,10 @@ public class BTNodeTrigger : MonoBehaviour
 
         if (other.gameObject.layer == _playerLayerMask)
         {
-
+            if (!audioSource.isPlaying) 
+            { 
+                audioSource.Play();
+            }
             playerInTrigger = true;
             alertState = true;
             Collider[] colliders = Physics.OverlapSphere(transform.position, alertRadius);
@@ -85,7 +89,7 @@ public class BTNodeTrigger : MonoBehaviour
         {
             lastExit = Time.fixedTime;
             playerInTrigger = false;
-            lastPlayerPosition = other.gameObject.transform;
+            lastPlayerPosition = other.gameObject.transform.position;
         }
     }
 }

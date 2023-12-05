@@ -41,7 +41,7 @@ public class FieldOfView : MonoBehaviour
         viewMesh = new Mesh();
         viewMesh.name = "View Mesh";
         viewMeshFilter.mesh = viewMesh;
-        if (name.Contains("Dog"))
+        if (name.Contains("Dog") || name.Contains("Idle"))
         {
           StartCoroutine(FOVRoutine());
         }

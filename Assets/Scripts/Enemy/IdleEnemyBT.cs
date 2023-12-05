@@ -23,7 +23,7 @@ public class IdleEnemyBT : BehaviourTree.Tree
             new Sequence(new List<Node>
             {
                 new CheckPlayerInFOV(transform,fov),
-                new TaskGoToTargetLook(transform,navMeshAgent),
+                new TaskGoToTargetLook(transform,navMeshAgent,alertScript),
             }),
             new Sequence(new List<Node>
             {
@@ -31,7 +31,7 @@ public class IdleEnemyBT : BehaviourTree.Tree
                 new Selector(new List<Node>
                 {
                       new GoToLastTargetPosition(transform,navMeshAgent, alertScript),
-                      new RandomRoam(),
+                      new RandomRoam(transform,navMeshAgent, alertScript),
                 }),
                 
             }),
