@@ -14,11 +14,13 @@ public class VictoryScreen : MonoBehaviour
 
     public void Restart()
     {
+        Time.timeScale = 1;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     public void MainMenu()
     {
+        Time.timeScale = 1;
         SceneManager.LoadScene(0);
     }
 
