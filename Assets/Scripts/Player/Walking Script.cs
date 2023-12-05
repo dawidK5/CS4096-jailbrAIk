@@ -25,7 +25,7 @@ public class PlayerController : MonoBehaviour
     bool isJumping = false;
     public GameManager gameManager;
     public static readonly List<string> enemyLayers = new List<string> {"DogEnemy", "Guard"}; /* Add more layers as needed */
-
+    
   // Start is called before the first frame update
   void Start()
     {
@@ -128,6 +128,12 @@ public class PlayerController : MonoBehaviour
         {
             Debug.Log("Player hit by " + collision.gameObject.name);
             gameManager.gameOverScreen.Setup();
+        }
+
+        if (collision.gameObject.name == "VictoryIdentifier")
+        {
+            // Debug.Log("Player hit by " + collision.gameObject.name);
+            gameManager.victoryScreen.Setup();
         }
     }
 }

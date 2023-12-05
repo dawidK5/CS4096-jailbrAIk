@@ -5,6 +5,8 @@ public class GameManager : MonoBehaviour
   private static GameManager instance = null;
 
   public GameOverScreen gameOverScreen;
+
+  public VictoryScreen victoryScreen;
   public static GameManager Instance
   {
     get
@@ -26,7 +28,6 @@ public class GameManager : MonoBehaviour
       instance = this;
     }
     DontDestroyOnLoad(instance); // if we want persistent state
-    // NodeManager.AssignNearestNeighbours();
   }
 
   public void Start()
@@ -38,6 +39,11 @@ public class GameManager : MonoBehaviour
   public static void GameOver()
   {
       Instance.gameOverScreen.Setup();
+  }
+
+  public static void Victory()
+  {
+      Instance.victoryScreen.Setup();
   }
 
   public static void StopGame()
