@@ -107,7 +107,7 @@ public class EnemyPatrol : MonoBehaviour
             {
               allNeighbours.Add(pn.nodeId.ToString());
             }
-            Debug.LogError($"ERROR: E_{enemyId}@NPP {currentNode}th neighbours: {String.Join(",",allNeighbours)}");
+            Debug.LogError($"ERROR: E_{enemyId}@NPP N_{P_NODES[currentNode].nodeId} neighbours: {String.Join(",",allNeighbours)}");
           }
           break;
         case < 0.8f:

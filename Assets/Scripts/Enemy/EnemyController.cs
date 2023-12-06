@@ -9,6 +9,7 @@ public class EnemyController : MonoBehaviour
   [Header("References")]
   public NavMeshAgent agent;
   public Transform player;
+  public Rigidbody playerRb;
   public EnemyPatrol patrol;
   public int enemyId = 0;
   public bool canSeePlayer = false;
@@ -72,6 +73,19 @@ public class EnemyController : MonoBehaviour
           // update player seen
           playerSeen.lastSeenHeard = Time.time;
           playerSeen.lastPosition = player.position;
+          // Steer towards where the player will be
+
+          // directionToPlayer.normalized
+          // float relativeHeading = Vector3.Dot(transform.forward, playerRb.velocity.normalized);
+          // if (relativeHeading < 0.0f)
+          // {
+          //   // 
+          // }
+          // else
+          // {
+
+          // }
+
           // if (directionToPlayer.sqrMagnitude < 2.0f)
           // {
           //   canCapturePlayer = true;
