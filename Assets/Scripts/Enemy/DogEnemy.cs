@@ -49,6 +49,19 @@ public class DogEnemy : MonoBehaviour, IHear
     // Update is called once per frame
     void Update()
     {
+         if (fieldOfView.canSeePlayer)
+        {
+            bool inRange = Vector3.Distance(transform.position, target.position) <= shootingDistance;
+            if (inRange)
+            {
+                LookAtTarget();
+            }
+            else
+            {
+                updatePath(target.position);
+            }
+
+        }
 
         if (fieldOfView.canSmellPlayer)
         {
@@ -63,19 +76,7 @@ public class DogEnemy : MonoBehaviour, IHear
             }
 
         }
-        if (fieldOfView.canSeePlayer)
-        {
-            bool inRange = Vector3.Distance(transform.position, target.position) <= shootingDistance;
-            if (inRange)
-            {
-                LookAtTarget();
-            }
-            else
-            {
-                updatePath(target.position);
-            }
-
-        }
+       
 
         if (!fieldOfView.canSmellPlayer && !fieldOfView.canSeePlayer && fieldOfView.playerLastLocatedTime < Time.time - 10f)
         {
@@ -100,7 +101,7 @@ public void updatePath(Vector3 position)
 {
     if (Time.time >= pathUpdateDeadline)
     {
-        if (!source.isPlaying && (Time.time - lastBarkTime) > 4f) //If already playing a sound, and if barked in the last 4 seconds, don't allow overlapping sounds 
+        if (!source.isPlaying && ((Time.time - lastBarkTime) > 4f || lastBarkTime == 0.0f)) //If already playing a sound, and if barked in the last 4 seconds, don't allow overlapping sounds 
         {
             source.Play();
             lastBarkTime = Time.time;
