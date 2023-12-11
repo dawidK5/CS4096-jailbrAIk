@@ -3,9 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using BehaviourTree;
-using Unity.VisualScripting;
-using UnityEditor.VersionControl;
-
 public class CheckPlayerInFieldOfView : Node
 {
     // Start is called before the first frame update
