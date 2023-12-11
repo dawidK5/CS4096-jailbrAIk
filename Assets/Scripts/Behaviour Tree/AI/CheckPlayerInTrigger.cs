@@ -1,10 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 using BehaviourTree;
-using Unity.VisualScripting;
-using UnityEditor.VersionControl;
 
 public class CheckPlayerInTrigger : Node
 {

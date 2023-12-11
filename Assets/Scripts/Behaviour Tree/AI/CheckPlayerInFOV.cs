@@ -1,11 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 using BehaviourTree;
-using Unity.VisualScripting;
-using UnityEditor.VersionControl;
-
 public class CheckPlayerInFOV : Node
 {
     // Start is called before the first frame update

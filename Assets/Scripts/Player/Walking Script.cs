@@ -122,7 +122,7 @@ public class PlayerController : MonoBehaviour
 
 
     void OnTriggerEnter(Collider collision) {
-        Debug.Log("hit at : " + collision.gameObject.name + LayerMask.LayerToName(collision.gameObject.layer));
+        // Debug.Log("hit at : " + collision.gameObject.name + LayerMask.LayerToName(collision.gameObject.layer));
         
         if (enemyLayers.Contains(LayerMask.LayerToName(collision.gameObject.layer)))
         {

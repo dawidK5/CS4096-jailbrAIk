@@ -7,7 +7,8 @@ public class MainMenuScreen : MonoBehaviour
 {
     public void ExitButton() {
         Debug.Log("Exit called");
-        Application.Quit();
+        GameManager.StopGame();
+        // Application.Quit();
     }
 
     public void StartButton() {

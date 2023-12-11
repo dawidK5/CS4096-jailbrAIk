@@ -17,6 +17,7 @@ public class FieldOfView : MonoBehaviour
     public LayerMask smellMask;
     public LayerMask DogLayer;
     public LayerMask obstructionMask;
+    public const int DOOR_OBSTRUCTION_MASK = (1 << 6) | (1 << 7);
     private Rigidbody rb;
     public float speed;
     public Vector3 playerLastSeenPostion;
@@ -157,7 +158,7 @@ public class FieldOfView : MonoBehaviour
         Vector3 dir = DirFromAngle(globalAngle, true);
         RaycastHit hit;
 
-        if (Physics.Raycast(transform.position, dir, out hit, radius, obstructionMask))
+        if (Physics.Raycast(transform.position, dir, out hit, radius, DOOR_OBSTRUCTION_MASK)) // add door layer
         {
             return new ViewCastInfo(true, hit.point, hit.distance, globalAngle);
         }
@@ -226,7 +227,7 @@ public class FieldOfView : MonoBehaviour
             {
                 float distanceToTarget = Vector3.Distance(transform.position, target.position);
 
-                if (!Physics.Raycast(transform.position, directionToTarget, distanceToTarget, obstructionMask))
+                if (!Physics.Raycast(transform.position, directionToTarget, distanceToTarget, DOOR_OBSTRUCTION_MASK))
                 {
                     //Debug.Log("can see Path");
                     canSeePlayer = true;

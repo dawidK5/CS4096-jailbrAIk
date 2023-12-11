@@ -1,9 +1,6 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using STMGR;
-using Unity.VisualScripting;
-using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -23,44 +20,29 @@ public class EnemyPatrol : MonoBehaviour
   public NavMeshAgent agent;
   public FSMStatus fsmStatus;
   private int enemyId = 0;
-  private float[] waitTimes = new float[1]
+  private bool[] rotationsDone = new bool[3] {false,false,false};
+  // private bool  isRotationRunning
+  private static readonly float[] WAIT_TIMES = new float[3]
   {
-    3.0f
+    2.0f, 2.0f, 2.0f,
   };
+  private float[] waitTimes = new float[3]
+  {
+    2.0f, 2.0f, 2.0f,
+  };
+  private static readonly float[] ROTATIONS = new float[3] {-50.0f, 100.0f, -50.0f}; // offset from forward
+  private static readonly float[] ROTATION_TIMES = new float[3] {1.5f, 3.0f, 1.5f };
   const float NODE_DIST = 1.5f;
 
-  // public void AssignNearestNodes()
-  // {
-  //   for (int i = 0; i < P_NODES.Length; i++)
-  //   {
-  //     for (int j = 0; j < P_NODES.Length; j++)
-  //     {
-  //       if (P_NODES[i].nodeId != P_NODES[j].nodeId)
-  //       {
-  //         float dist = (P_NODES[i].location - P_NODES[j].location).sqrMagnitude;
-  //         Debug.Log("Dist " + i + " to " + j + " " + dist);
-  //         if (dist < P_NODES[i].nearNodesRadiusSq)
-  //         {
-  //           Debug.Log("Attempt: add " + j + " to " + i);
-  //           P_NODES[i].AddNear(P_NODES[j]);
-  //         }
-  //       }
-  //     }
-  //   }
-  // }
-  
-  void Start()
+  public void Setup(FSMStatus fsmStatus, EnemyController myEnemy)
   {
-    // P_NODES = new PatrolNode[9];
-    // AssignNearestNodes();
-  }
-
-  public void Setup(FSMStatus fsmStatus)
-  {
+    this.enemy = myEnemy;
+    // Debug.Log($"Setting up enemy, current state: {this.enemy.currentState}, can see: {this.enemy.canSeePlayer}");
     enemyId = enemy.enemyId;
-    Debug.Log($"E_{enemyId}@S: began patrolling");
+    // Debug.Log($"E_{enemyId}@S: began patrolling");
     this.fsmStatus = fsmStatus;
-    enemy.agent.speed = enemy.DEFAULT_SPEED + 1.0f;
+    ResetRotations();
+    // enemy.agent.speed = enemy.DEFAULT_SPEED + 1.0f;
     currentNode = NearestNode();
     currentNeighbor = -1;
     agent.SetDestination(P_NODES[currentNode].location);
@@ -94,11 +76,11 @@ public class EnemyPatrol : MonoBehaviour
           // go to neighbour of current node
           PatrolNode p = P_NODES[currentNode];
           currentNeighbor = UnityEngine.Random.Range(0, p.nearNodesIndex);
-          Debug.Log($"E_{enemyId}@NPP: try neighbour {currentNeighbor} of PN_{p.nodeId}");
+          // Debug.Log($"E_{enemyId}@NPP: try neighbour {currentNeighbor} of PN_{p.nodeId}");
           try
           {
             nodeBusy = P_NODES[currentNode].nearNodes[currentNeighbor].occupied;
-            Debug.Log($"E_{enemyId}@NPP: try neighbour | success:{!nodeBusy}");
+            // Debug.Log($"E_{enemyId}@NPP: try neighbour | success:{!nodeBusy}");
           }
           catch
           {
@@ -107,10 +89,11 @@ public class EnemyPatrol : MonoBehaviour
             {
               allNeighbours.Add(pn.nodeId.ToString());
             }
-            Debug.LogError($"ERROR: E_{enemyId}@NPP N_{P_NODES[currentNode].nodeId} neighbours: {String.Join(",",allNeighbours)}");
+            // Debug.Log($"E_{enemyId}@NPP N_{P_NODES[currentNode].nodeId} has no neighbours, will draw again");
           }
           break;
         case < 0.8f:
+          // go to next patrol node
           currentNeighbor = -1;
           if (currentNode+1 < P_NODES.Length)
           {
@@ -121,13 +104,21 @@ public class EnemyPatrol : MonoBehaviour
             currentNode = 0;
           }
           nodeBusy = P_NODES[currentNode].occupied;
-          Debug.Log($"E_{enemyId}@NPP: try next node | success:{!nodeBusy}");
+          // Debug.Log($"E_{enemyId}@NPP: try next node | success:{!nodeBusy}");
           break;
         default:
-          currentNeighbor = -1;
-          currentNode = Math.Max(currentNode - 1, 0);
-          nodeBusy = P_NODES[currentNode].occupied;
-          Debug.Log($"E_{enemyId}@NPP: try previous node | success:{!nodeBusy}");
+          // if bored go to previous node
+          if (enemy.bored < 0.5f)
+          {
+            currentNeighbor = -1;
+            currentNode = Math.Max(currentNode - 1, 0);
+            nodeBusy = P_NODES[currentNode].occupied;
+          }
+          else
+          {
+            nodeBusy = true; // draw again
+          }
+          // Debug.Log($"E_{enemyId}@NPP: try previous node | success:{!nodeBusy}");
           break;
       }  
     }
@@ -136,6 +127,11 @@ public class EnemyPatrol : MonoBehaviour
 
   public void Reset()
   {
+    ResetRotations();
+    for (int i = 0; i < 3; i++)
+    {
+      waitTimes[i] = WAIT_TIMES[i];
+    }
     if (currentNeighbor == -1)
     {
       P_NODES[currentNode].occupied = false;
@@ -148,24 +144,60 @@ public class EnemyPatrol : MonoBehaviour
     currentNeighbor = -1;
   }
 
+  private void ResetRotations()
+  {
+    for (int i = 0; i < 3; i++)
+    {
+      waitTimes[i] = WAIT_TIMES[i];
+      rotationsDone[i] = false;
+    }
+  }
   public void RunUpdate(float deltaTime)
   {
-    if (enemy.canSeePlayer)
+//    Debug.Log(this.enemy.currentState);
+    if (this.enemy.canSeePlayer)
     {
       fsmStatus.nextState = ENEMY_STATES.CHASE;
       fsmStatus.transitionDue = true;
       return;
     }
+    // wait for enemy to finish slerp
+    if (enemy.isTurning || enemy.isRotating)
+    {
+      return;
+    }
     if (agent.remainingDistance < NODE_DIST)
-    { // if we are at a node, wait 3s, goto next
-      if (waitTimes[0] > 0.0f)
+    { // if we are at a node
+      // stop fully
+      if (!agent.isStopped)
       {
-        Debug.Log($"E_{enemyId}@RU: Waiting at patrol node {currentNode}: {waitTimes[0]}s left");
-        waitTimes[0] -= deltaTime;
-        // Debug.Log("Remaining dist to node: " + agent.remainingDistance);
+        agent.ResetPath();
+        agent.isStopped = true;
+        ResetRotations();
+        // Debug.Log("Start SLERP");
+        enemy.RotateToInterestingSpace();
         return;
       }
-      // after waiting, free the node
+      // Debug.Log($"enemy turning: {enemy.isTurning}");
+      // then complete rotations at node
+      for (int i = 0; i < 3; i++)
+      {
+        if (!rotationsDone[i])
+        {
+          // Debug.Log($"Start Rotation {i}");
+
+          enemy.RotateTo(ROTATIONS[i], ROTATION_TIMES[i]);
+          // Debug.Log($"Rotation {i} done");
+          rotationsDone[i] = true;
+          return;
+        }
+        if (waitTimes[i] > 0.0f)
+        {
+          waitTimes[i] -= deltaTime;
+          return;
+        }
+      }
+      // After lookinng, get next node
       if (currentNeighbor == -1)
       {
         P_NODES[currentNode].occupied = false;
@@ -180,19 +212,80 @@ public class EnemyPatrol : MonoBehaviour
         // go to current, assume did not get occupied in mean time
         agent.SetDestination(P_NODES[currentNode].location);
         P_NODES[currentNode].occupied = true;
+        agent.isStopped = false;
       }
       else
       {
         // go to neighbour
         agent.SetDestination(P_NODES[currentNode].nearNodes[currentNeighbor].location);
         P_NODES[currentNode].nearNodes[currentNeighbor].occupied = true;
+        agent.isStopped = false;
       }
-      
-        Debug.Log($"Enemy {this.name} cannot got to its node {currentNode}");
-        // throw new IndexOutOfRangeException();
-      }
-      waitTimes[0] = waitTimeAtNode;
     }
+  }
+}
+    
+      // if (waitTimes[0] > 0.0f)
+      // {
+      //   if (!enemy.isRotating)
+      //   {
+      //     enemy.rotateBy = -170.0f;
+      //     enemy.isRotating = true;
+      //     return;
+      //   }
+        //        Debug.Log($"E_{enemyId}@RU: Waiting at patrol node {currentNode}: {waitTimes[0]}s left");
+        // agent.transform.rotation = Quaternion.Slerp(agent.transform.rotation, Quaternion.Euler(0, -170.0f, 0), 2.0f-waitTimes[0]);
+        // waitTimes[0] -= deltaTime;
+        // Debug.Log("Remaining dist to node: " + agent.remainingDistance);
+        // return;
+      // }
+      // if (waitTimes[1] > 0.0f)
+      // {
+      //   if (!enemy.isRotating)
+      //   {
+      //     enemy.rotateBy = 340.0f;
+      //     enemy.isRotating = true;
+      //     return;
+      //   }
+      //   //        Debug.Log($"E_{enemyId}@RU: Waiting at patrol node {currentNode}: {waitTimes[0]}s left");
+      //   // agent.transform.rotation = Quaternion.Slerp(agent.transform.rotation, Quaternion.Euler(0, 340.0f, 0), 4.0f-waitTimes[1]);
+      //   waitTimes[1] -= deltaTime;
+      //   // Debug.Log("Remaining dist to node: " + agent.remainingDistance);
+      //   return;
+      // }
+      // if (waitTimes[2] > 0.0f)
+      // {
+      //   if (!enemy.isRotating)
+      //   {
+      //     enemy.rotateBy = -170.0f;
+      //     enemy.isRotating = true;
+      //     return;
+      //   }
+      //   //        Debug.Log($"E_{enemyId}@RU: Waiting at patrol node {currentNode}: {waitTimes[0]}s left");
+      //   //agent.transform.rotation = Quaternion.Slerp(agent.transform.rotation, Quaternion.Euler(0, -170.0f, 0), 2.0f - waitTimes[1]);
+      //   waitTimes[2] -= deltaTime;
+      //   // Debug.Log("Remaining dist to node: " + agent.remainingDistance);
+      //   return;
+      // }
+      // if (waitTimes[0] > 0.0f)
+      // {
+      //   //        Debug.Log($"E_{enemyId}@RU: Waiting at patrol node {currentNode}: {waitTimes[0]}s left");
+      //   waitTimes[0] -= deltaTime;
+      //   // Debug.Log("Remaining dist to node: " + agent.remainingDistance);
+      //   return;
+      // }
+      //Quaternion.RotateTowards(Quaternion.LookRotation(agent.transform.forward), Quaternion.LookRotation(agent.transform.right), 8.0f);
+      // after waiting, free the node
+      // Free up the node
+      
+      
+        // Debug.Log($"Enemy {this.name} cannot got to its node {currentNode}");
+        // throw new IndexOutOfRangeException();
+      
+      // waitTimes[0] = 2.0f;
+      // waitTimes[1] = 4.0f;
+      // waitTimes[2] = 2.0f;
+    
     // if (agent.remainingDistance < 4.0f)
     // { // if very close to the node, take it over
     //   if(currentNeighbor == -1)
@@ -204,7 +297,7 @@ public class EnemyPatrol : MonoBehaviour
     //     P_NODES[currentNode].nearNodes[currentNeighbor].occupied = false;
     //   }
     // }
-  }
+  
 
 
 

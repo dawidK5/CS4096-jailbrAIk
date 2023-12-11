@@ -25,6 +25,7 @@ public class GameOverScreen : MonoBehaviour
 
     public void Exit()
     {
+      GameManager.StopGame();
         // SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 

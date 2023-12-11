@@ -1,12 +1,8 @@
 using STMGR;
 using UnityEngine;
-using System.Collections;
-using Unity.VisualScripting;
-using UnityEngine.AI;
 
 public abstract class State
 {
-  // public GameManager gm = GameManager.Instance();
   public EnemyController enemy;
   public FSMStatus fsmStatus;
   protected float updateInterval = 0.25f; 
@@ -19,13 +15,16 @@ public abstract class State
 public sealed class IdleState : State
 {
   private float[] waitTimes = new float[2]{
-    3.0f, 1.0f
+    8.0f, 1.0f
   };
   public override void EnterState(FSMStatus fsmStatus)
   {
     this.fsmStatus = fsmStatus;
+    enemy.deltaBored = 0.1f;
+    enemy.deltaTired = 0.0f;
     enemy.agent.speed = enemy.DEFAULT_SPEED;
-    Debug.Log($"FSM@EnS: E_{enemy.enemyId} entered idle");
+    enemy.agent.acceleration = enemy.DEFAULT_ACCELERATION;
+    // Debug.Log($"FSM@EnS: E_{enemy.enemyId} entered idle");
   }
 
   public override void UpdateState(float deltaTime)
@@ -47,7 +46,7 @@ public sealed class IdleState : State
     waitTimes[0] -= deltaTime;
     if (waitTimes[0] > 0.0f)
     {
-      Debug.Log($"Waiting idle {waitTimes[0]}");
+//      Debug.Log($"Waiting idle {waitTimes[0]}");
       return;
     }
     else
@@ -61,7 +60,8 @@ public sealed class IdleState : State
   public override void ExitState()
   {
     enemy.bored = 1.0f;
-    Debug.Log($"FSM@ExS: E_{enemy.enemyId} exited idle");
+    enemy.tired = 1.0f;
+    // Debug.Log($"FSM@ExS: E_{enemy.enemyId} exited idle");
   }
 }
 
@@ -69,15 +69,20 @@ public sealed class PatrolState : State
 // sealed because we wont subclass further, tag for performance
 {
   private EnemyPatrol patrol;
-
+  
   public override void EnterState(FSMStatus fsmStatus)
   {
     this.fsmStatus = fsmStatus;
+    enemy.deltaBored = 0.02f;
+    enemy.deltaTired = 0.0f;
     enemy.agent.speed = enemy.DEFAULT_SPEED;
+    enemy.agent.acceleration = enemy.DEFAULT_ACCELERATION;
     patrol = enemy.patrol;
-    Debug.Log($"FSM@EnS: E_{enemy.enemyId} entered patrol state");
-    patrol.Setup(fsmStatus);
+    patrol.enemy = this.enemy;
+    // Debug.Log($"FSM@EnS: E_{enemy.enemyId} entered patrol state");
+    patrol.Setup(fsmStatus, enemy);
   }
+
   public override void UpdateState(float deltaTime)
   {
     patrol.RunUpdate(deltaTime);
@@ -87,7 +92,8 @@ public sealed class PatrolState : State
   {
     patrol.Reset();
     enemy.bored = 1.0f;
-    Debug.Log($"FSM@ExS: E_{enemy.enemyId} exited patrol state");
+    enemy.tired = 1.0f;
+    // Debug.Log($"FSM@ExS: E_{enemy.enemyId} exited patrol state");
   }
 
 
@@ -101,51 +107,137 @@ public sealed class ChaseState : State
   public override void EnterState(FSMStatus fsmStatus)
   {
     this.fsmStatus = fsmStatus;
-    Debug.Log($"FSM@EnS:  E_{enemy.enemyId} entered chasing");
-    maxChaseSpeed = enemy.DEFAULT_SPEED * 4.0f;
+    // Debug.Log($"FSM@EnS:  E_{enemy.enemyId} entered chasing");
+
+    maxChaseSpeed = enemy.DEFAULT_SPEED * 1.5f;
+    runningTimeSinceSeen = 0.0f;
     enemy.agent.speed = maxChaseSpeed;
-    enemy.agent.SetDestination(enemy.playerSeen.lastPosition);
-    timeWhenLastSeen = 0.0f; // enemy.playerSeen.lastSeenHeard;
+    enemy.agent.acceleration = enemy.DEFAULT_ACCELERATION *1.5f;
+    enemy.bored = 0.0f;
+    enemy.deltaBored = 0.0f;
+    enemy.deltaTired = 0.005f;
+
+    enemy.agent.SetDestination(enemy.target);
+    // enemy.agent.SetDestination(enemy.playerSeen.lastPosition);
   }
 
   public override void UpdateState(float deltaTime)
   {
-    if (timeWhenLastSeen < enemy.playerSeen.lastSeenHeard)
+    enemy.agent.SetDestination(enemy.target);
+    enemy.agent.isStopped = false;
+
+    if (enemy.tired < 0.001f)
     {
-      timeWhenLastSeen = enemy.playerSeen.lastSeenHeard;
-      runningTimeSinceSeen = 0.0f;
-    }
-    // if(enemy.canCapturePlayer)
-    // {
-    //   //GameManager.StopGame();
-    // }
-    if (enemy.tired < 0.1f)
-    {
-      Debug.Log($"FSM@US: E_{enemy.enemyId} tired, stoppped chaising");
+      // Debug.Log($"FSM@US: E_{enemy.enemyId} tired, stop chaise, wil look around");
       enemy.agent.ResetPath();
-      fsmStatus.nextState = ENEMY_STATES.IDLE;
+      enemy.agent.isStopped = true;
+      fsmStatus.nextState = ENEMY_STATES.LOST_CHASE;
       fsmStatus.transitionDue = true;
       return;
     }
-    if (enemy.agent.remainingDistance == 0.0f)
-    { // if enemy is at last player pos
+    if (!enemy.canSeePlayer)
+    { // if cannot see player
       runningTimeSinceSeen += deltaTime;
     }
-    if (runningTimeSinceSeen > 5.0f)
+    else
     {
-      Debug.Log($"FSM@US: E_{enemy.enemyId} stops chase aft 5s at last player pos, will patrol");
-      fsmStatus.nextState = ENEMY_STATES.PATROL;
+      runningTimeSinceSeen = 0.0f;
+    }
+    if (runningTimeSinceSeen > 10.0f)
+    {
+      // Debug.Log($"FSM@US: E_{enemy.enemyId} lost player for 10s, will look around");
+      fsmStatus.nextState = ENEMY_STATES.LOST_CHASE;
       fsmStatus.transitionDue = true;
       return;
     }
-    enemy.agent.speed = maxChaseSpeed * enemy.tired;
-    enemy.agent.SetDestination(enemy.playerSeen.lastPosition);
-    enemy.tired -= 0.02f;
   }
 
   public override void ExitState()
   {
-    Debug.Log($"FSM@ExS:  E_{enemy.enemyId} exited chasing");
+    // Debug.Log($"FSM@ExS:  E_{enemy.enemyId} exited chasing");
     enemy.tired = 1.0f;
+    enemy.agent.ResetPath();
+    enemy.agent.isStopped= true;
+  }
+}
+
+public sealed class LostChase : State
+{
+  private bool[] rotationDone = new bool[3]{false, false, false};
+  private static readonly float[] ROTATIONS = new float[3]{-90.0f, 180.0f, -90.0f};
+  private int step = 0;
+
+  private void ResetRotations()
+  {
+    for (int i = 0; i < 3; i++)
+    {
+      rotationDone[i] = false;
+    }
+  }
+
+  public override void EnterState(FSMStatus fsmStatus)
+  {
+    this.fsmStatus = fsmStatus;
+    step = 0;
+    enemy.agent.isStopped = false;
+    enemy.agent.SetDestination(enemy.target);
+    enemy.agent.speed = enemy.DEFAULT_SPEED;
+    enemy.agent.acceleration = enemy.DEFAULT_ACCELERATION;
+    ResetRotations();
+    enemy.deltaBored = 0.02f;
+    // Debug.Log($"FSM@ExS:  E_{enemy.enemyId} entered lost chase");
+
+  }
+
+  private bool RotationsDone()
+  { // returns true when all rotations
+    for (int i = 0 ; i < 3; i++)
+    {
+      if(!rotationDone[i])
+      {
+        if (enemy.isRotating)
+        {
+          return false;
+        }
+        // Debug.Log($"E_{enemy.enemyId}: Starts {i+1}th rotation");
+        enemy.RotateTo(ROTATIONS[i], 1.5f);
+        rotationDone[i] = true;
+        return false;
+      }
+    }
+    // Debug.Log("Finished lost chase rotations");
+    return true;
+  }
+  public override void UpdateState(float deltaTime)
+  {
+    if (enemy.canSeePlayer)
+    {
+      fsmStatus.nextState = ENEMY_STATES.CHASE;
+      fsmStatus.transitionDue = true;
+      return;
+    }
+    if (enemy.DistToTarget() < 2.5f)
+    { // when reached last pos, look around
+      enemy.agent.ResetPath();
+      enemy.agent.isStopped = true;
+      
+      if (!RotationsDone())
+      {
+        return;
+      }
+      if (enemy.bored < 0.3f)
+      {
+        // Debug.Log($"E_{enemy.enemyId}@LOST_CHASE: Finished looking, will patrol");
+        fsmStatus.nextState = ENEMY_STATES.PATROL;
+        fsmStatus.transitionDue = true;
+      }
+    }
+  }
+
+  public override void ExitState()
+  {
+    enemy.agent.ResetPath();
+    enemy.agent.isStopped = true;
+    enemy.bored = 1.0f;
   }
 }

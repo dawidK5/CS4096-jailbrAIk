@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEditor;
 
 public class GameManager : MonoBehaviour
 {
@@ -48,6 +49,10 @@ public class GameManager : MonoBehaviour
 
   public static void StopGame()
   {
+    #if UNITY_EDITOR
       UnityEditor.EditorApplication.isPlaying = false;
+    #else
+      Application.Quit();
+    #endif
   }
 }

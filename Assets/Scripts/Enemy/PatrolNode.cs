@@ -21,36 +21,21 @@ public class PatrolNode : MonoBehaviour
   {
     location = this.GetComponent<Transform>().position;
     nearNodes = new List<PatrolNode>(MAX_SLOTS);
-    // nearNodesRadiusSq = radius * radius;
-    // repeated for MonoBehaviour handling and avoiding index errors
     nodeId = Utils.getId(name);
     
   }
 
-  // public void Start()
+  // private void OnDrawGizmos()
   // {
-  //   Debug.Log("List " + nearNodes);
-  //   Debug.Log($"Dist is {Vector3.Distance(new Vector3(19,0,6), new Vector3(27,0,-4))}");
+  //   Handles.color = Color.red;
+  //   Handles.DrawWireDisc(location, Vector3.up, radius);
   // }
-
-  // public virtual void OnDrawGizmos()
-  // {
-  //   Gizmos.color = Color.red;
-  //   Gizmos.DrawWireDisc(transform.position, 14.49f);
-  // }
-
-  private void OnDrawGizmos()
-  {
-    Handles.color = Color.red;
-    Handles.DrawWireDisc(location, Vector3.up, radius);
-  }
 
   public void AddNear(PatrolNode pn)
   {
     if (nearNodesIndex < MAX_SLOTS)
     {
-      Debug.Log("Adding at " + nearNodesIndex + " to " + this.ToString());
-      // nearNodes[nearNodesIndex] = pn;
+      // Debug.Log("Adding at " + nearNodesIndex + " to " + this.ToString());
       nearNodes.Add(pn);
       nearNodesIndex++;
     }

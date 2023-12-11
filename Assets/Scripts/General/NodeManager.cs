@@ -16,7 +16,7 @@ public class NodeManager : MonoBehaviour
           // Debug.Log("Dist " + i + " to " + j + " " + dist);
           if (dist < pNodes[i].nearNodesRadiusSq)
           {
-            Debug.Log("Attempt: add " + j + " to " + i);
+            // Debug.Log("Attempt: add " + j + " to " + i);
             pNodes[i].AddNear(pNodes[j]);
           }
         }
@@ -28,6 +28,6 @@ public class NodeManager : MonoBehaviour
   {
     pNodes = GetComponentsInChildren<PatrolNode>();
     AssignNearestNeighbours();
-    Debug.Log("NM@St: Node neighbours assigned");
+    // Debug.Log("NM@St: Node neighbours assigned");
   }
 }

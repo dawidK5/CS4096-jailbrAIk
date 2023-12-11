@@ -1,8 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using STMGR;
-using UnityEngine.Assertions.Must;
 
 public class StateMachine : MonoBehaviour
 {
@@ -21,7 +18,8 @@ public class StateMachine : MonoBehaviour
   {
     new IdleState(),
     new PatrolState(),
-    new ChaseState()
+    new ChaseState(),
+    new LostChase()
   };
 
   [SerializeField]
@@ -43,7 +41,7 @@ public class StateMachine : MonoBehaviour
 
   void Update()
   {
-    if (loopTime > 0.25f)
+    if (loopTime > 0.125f)
     {
       if (fsmStatus.transitionDue)
       {
@@ -52,48 +50,20 @@ public class StateMachine : MonoBehaviour
       else
       {
         allStates[(int)currentState].UpdateState(loopTime);
-        Debug.Log($"Executed in FSM: {loopTime}");
+//        Debug.Log($"Executed in FSM: {loopTime}");
         loopTime = 0.0f;
       }
     }
     loopTime += Time.deltaTime;
   }
-  // Update is called once per frame
-  // void Update()
-  // {
-  //   if (loopTime > 0.25f)
-  //   {
-  //     if (fsmStatus.transitionDue)
-  //     {
-  //       fsmStatus.transitionDue = false;
-  //       ChangeState(fsmStatus.nextState);
-  //     }
-
-  //     // if (fsmStatus.updateFinished && fsmStatus.sensingFinished && !updateCoroutineRunning)
-  //     // {
-  //     //   Debug.Log("Start Coroutine");
-  //     //   fsmStatus.updateFinished = false;
-  //     //   updateCoroutineRunning = true;
-  //     //   StartCoroutine(allStates[(int)currentState].UpdateState(fsmStatus));
-  //     // }
-  //     // else
-  //     // {
-  //     //   Debug.Log("Update or sense not finished");
-  //     // }
-  //     loopTime = 0.0f;
-  //   }
-  //   loopTime += Time.deltaTime;
-  //   // bored -= 0.1f;
-  // }
 
   private void ChangeState(ENEMY_STATES nextState)
   {
     fsmStatus.transitionDue = false;
     allStates[(int)currentState].ExitState();
     currentState = nextState;
+//    Debug.Log($"Change state to {nextState}");
+    this.enemy.currentState = nextState;
     allStates[(int)currentState].EnterState(fsmStatus);
   }
-  // state machine should call UpdateState (and do the clocking), Update state should check and return
-  // pass delta time to UpdateState
-  // ---- pass 0 do logic add 5 
 }
