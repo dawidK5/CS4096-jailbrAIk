@@ -15,10 +15,6 @@ public class DogEnemy : MonoBehaviour, IHear
     private float pathUpdateDeadline;
     public FieldOfView fieldOfView;
 
-    //public GameManager gameManager;
-
-    //DogAgent dogAgent;
-
     [SerializeField] private AudioSource source;
 
     [SerializeField] private float soundRange = 25f;
@@ -82,9 +78,10 @@ public class DogEnemy : MonoBehaviour, IHear
         {
             
             dogBoredOrTired = 0.0f;
-            dogPatrol = (DogPatrol)gameObject.GetComponent<DogBT>().root;
-            dogPatrol.UpdateDestination();
-
+            if (gameObject.GetComponent<DogBT>() != null) {
+                dogPatrol = (DogPatrol)gameObject.GetComponent<DogBT>().root;
+                dogPatrol.UpdateDestination();
+            }
         }
         
 }
@@ -106,7 +103,7 @@ public void updatePath(Vector3 position)
             source.Play();
             lastBarkTime = Time.time;
         }
-        // var sound = new Sound(transform.position, soundRange, soundType); // $$$$change this . property
+        
         sound.pos = transform.position;
         Sounds.MakeSound(sound);
 
@@ -119,8 +116,7 @@ public void updatePath(Vector3 position)
 public void RespondToSound(Sound sound)
 {
     if (gameObject.transform.position != sound.pos)
-    { // priority
-      //Debug.Log(name + "responding to sound at" + sound.pos);
+    { // priority check
         dogEnemyRef.navMeshAgent.SetDestination(sound.pos);
     }
 }

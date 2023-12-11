@@ -32,23 +32,7 @@ public class DogPatrol : Node
         }
         else
         {
-            //Transform wp = _waypoints[_currentWaypointIndex];
-            //Debug.Log(Vector3.Distance(_transform.position, wp.position));
-            //Debug.Log("transform postion is "+_transform.position);
-            //if (Vector3.Distance(_transform.position, wp.position) < 0.2f)
-            //{
-            //    _transform.position = wp.position;
-            //    _waitCounter = 0f;
-            //    _waiting = true;
-            //    _currentWaypointIndex = (_currentWaypointIndex + 1) % _waypoints.Length;
-            //}
-            //else
-            //{
-            //    //_transform.position = Vector3.MoveTowards(_transform.position, wp.position, 3f * Time.deltaTime);
-            //    //_navMeshAgent.SetDestination(wp.position);
-            //    _transform.LookAt(wp.position);
-            //}
-
+            
             if (Vector3.Distance(_transform.position, target) < 0.8f)
             {
                 _waitCounter = 0f;

@@ -61,7 +61,6 @@ public class FieldOfView : MonoBehaviour
             yield return wait;
             FieldOfViewCheck();
             FieldOfSmellCheck();
-            PlayerDetected();
         }
     }
 
@@ -205,14 +204,6 @@ public class FieldOfView : MonoBehaviour
         }
     }
 
-    private void chase()
-    {
-        //transform.LookAt(playerRef.transform);
-        //float distanceToTarget = Vector3.Distance(transform.position, playerRef.transform.position);
-        //Vector3 directionToTarget = playerRef.transform.position - transform.position;
-
-        //transform.position = Vector3.MoveTowards(this.transform.position, playerRef.transform.position, speed * Time.deltaTime);
-    }
 
     private bool FieldOfViewCheck()
     {
@@ -229,7 +220,7 @@ public class FieldOfView : MonoBehaviour
 
                 if (!Physics.Raycast(transform.position, directionToTarget, distanceToTarget, DOOR_OBSTRUCTION_MASK))
                 {
-                    //Debug.Log("can see Path");
+                    
                     canSeePlayer = true;
                     timePlayerLastSeen = Time.fixedTime;
                     playerLastSeenPostion = target.position;
@@ -254,49 +245,20 @@ public class FieldOfView : MonoBehaviour
         if (rangeChecks.Length != 0)
         {
             Transform target = rangeChecks[0].transform;
-            Vector3 directionToTarget = (target.position - transform.position).normalized;
-
             
-                float distanceToTarget = Vector3.Distance(transform.position, target.position);
-
-                //if (!Physics.Raycast(transform.position, directionToTarget, distanceToTarget, obstructionMask))
                 {
                     Debug.Log("can smell Player");
                     canSmellPlayer = true;
                     lastSmelledPosition = target.position;
                     playerLastLocatedTime = Time.time;
                 }
-                //else
-                //    canSmellPlayer = false;
+                
              
         }
         else if (canSmellPlayer)
             canSmellPlayer = false;
 
         return canSmellPlayer;
-    }
-
-    private bool PlayerDetected()
-    {
-        Collider[] collider = Physics.OverlapSphere(transform.position, radiusOfHearing, DogLayer);
-
-        if (collider.Length != 0)
-        {
-            foreach (Collider c in collider)
-            {
-                if (c.gameObject != gameObject) { 
-                    canHearOtherEnemy = true;
-                }
-                else
-                {
-                    canHearOtherEnemy = false;
-                }
-            }
-            
-        }
-        
-
-        return canHearOtherEnemy;
     }
 
 
